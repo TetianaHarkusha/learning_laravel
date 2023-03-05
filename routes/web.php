@@ -22,10 +22,15 @@ Route::get('/posts', function () {
     return 'Список постів';
 })->name('allPosts');
 
-Route::get('/post/1', function () {
-    return 'Перший пост ';
+// route for p.4
+Route::get('/post/{id}', function ($id) {
+    return 'Пост ' . $id;
 });
 
+// route for p.6
+Route::get('/post/{catId}/{postId}', function ($catId, $postId) {
+    return 'Пост ' . $postId . ' в категорієї ' . $catId;
+});
 
 // routes for p.3
 Route::get('/test', function () {
@@ -34,4 +39,19 @@ Route::get('/test', function () {
 
 Route::get('/dir/test', function () {
     return 'Тестова сторінка в dir';
+});
+
+// route for p.5
+Route::get('/user/{name}', function ($name) {
+    return 'Користувач ' . $name;
+});
+
+// route for p.7
+Route::get('/user/{surname}/{name}', function ($surname, $name) {
+    return 'Користувач ' . $surname . ' ' . $name;
+});
+
+// route for p.8
+Route::get('/city/{city?}', function ($city = 'Kyiv') {
+    return 'Місто ' . $city;
 });
