@@ -44,12 +44,22 @@ Route::get('/dir/test', function () {
 // route for p.5
 Route::get('/user/{name}', function ($name) {
     return 'Користувач ' . $name;
-});
+})->whereAlpha('name');
 
 // route for p.7
 Route::get('/user/{surname}/{name}', function ($surname, $name) {
     return 'Користувач ' . $surname . ' ' . $name;
-});
+})->whereAlpha(['name','surname']);
+
+// route for p.9
+Route::get('/user/{id}', function ($id) {
+    return 'Користувач id=' . $id;
+})->whereNumber('id');
+
+// route for p.10
+Route::get('/user/{id}/{name}', function ($id, $name) {
+    return 'Користувач ' . $name . ' (id= ' . $id . ')';
+})->whereNumber('id')->where('name', '[a-z]{2,}');
 
 // route for p.8
 Route::get('/city/{city?}', function ($city = 'Kyiv') {
