@@ -75,3 +75,14 @@ Route::get('/city/{city?}', function ($city = 'Kyiv') {
 Route::get('/{year}/{month}/{day}', function ($year, $month, $day) {
     return 'Дата ' . $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-' . str_pad($day, 2, '0', STR_PAD_LEFT);
 });
+
+//routes for p.13
+Route::prefix('admin')->group(function() {
+    Route::get('/users', function () {
+        return 'all';
+    });
+    Route::get('/user/{id}', function ($id) {
+        return $id;
+    });
+});
+
