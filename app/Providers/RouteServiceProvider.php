@@ -47,6 +47,13 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
         });
+
+        //global patterns for parameters
+        Route::patterns(['date' => '[1-2]{1}[0-9]{3}-([0]?[1-9]|[1][0-2])-([0]?[1-9]|[1-2][0-9]|[3][0-1])',
+            'year' => '[1-2]{1}[0-9]{3}',
+            'month' => '[0]?[1-9]|[1][0-2]',
+            'day' => '[0]?[1-9]|[1-2][0-9]|[3][0-1]',
+            'id' => '[0-9]+']);
     }
 
     /**

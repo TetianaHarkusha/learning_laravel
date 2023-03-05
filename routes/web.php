@@ -22,6 +22,11 @@ Route::get('/posts', function () {
     return 'Список постів';
 })->name('allPosts');
 
+//route for p.11
+Route::get('/posts/{date}', function ($date) {
+    return 'Список постів від ' . $date;
+});
+
 // route for p.4
 Route::get('/post/{id}', function ($id) {
     return 'Пост ' . $id;
@@ -64,4 +69,9 @@ Route::get('/user/{id}/{name}', function ($id, $name) {
 // route for p.8
 Route::get('/city/{city?}', function ($city = 'Kyiv') {
     return 'Місто ' . $city;
+});
+
+//route for p.12
+Route::get('/{year}/{month}/{day}', function ($year, $month, $day) {
+    return 'Дата ' . $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-' . str_pad($day, 2, '0', STR_PAD_LEFT);
 });
