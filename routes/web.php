@@ -13,6 +13,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// routes for p.1
 Route::get('/', function () {
-    return view('welcome');
+    return 'Головна сторінка сайту';
+})->name('main');
+
+Route::get('/posts', function () {
+    return 'Список постів';
+})->name('allPosts');
+
+Route::get('/post/1', function () {
+    return 'Перший пост ';
+});
+
+
+// routes for p.3
+Route::get('/test', function () {
+    return 'Тестова сторінка';
+});
+
+Route::get('/dir/test', function () {
+    return 'Тестова сторінка в dir';
 });
