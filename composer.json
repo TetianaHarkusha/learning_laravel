@@ -50,7 +50,7 @@
         ],
         "format":[
             "./vendor/bin/php-cs-fixer fix routes",
-            "./vendor/bin/php-cs-fixer fix app/Providers"
+            "./vendor/bin/php-cs-fixer fix app"
         ]
 
     },
