@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\View;
 
 // routes for p.1
 Route::get('/', function () {
-    return View::make('main', ['name' => 'Tetiana', 'surname' => 'Harkusha']);
+    return View::make('main');
 })->name('main');
 
 //grouped routes 'posts' and used controller
