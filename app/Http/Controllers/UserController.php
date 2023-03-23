@@ -14,7 +14,19 @@ class UserController extends Controller
      */
     public function show($id, $name = '')
     {
-        return 'Користувач ' . (is_numeric($id) ? '(id=' . $id .')' : $id) . ' ' . $name;
+        $title = 'user-' . $id;
+        $title .= (($name == '') ? '' : ('-' . $name));
+
+        if (!is_numeric($id)) {
+            ${($name == '') ? 'name' : 'surname'} = $id;
+            unset($id);
+        }
+
+        return view('Users.user', [
+            'title' => $title,
+            'id' => $id??'',
+            'name' => $name??'',
+            'surname' => $surname??'']);
     }
 
     /**
@@ -22,7 +34,7 @@ class UserController extends Controller
      */
     public function showAll()
     {
-        return 'Список всіх користувачів.';
+        return view('Users.usersAll');
     }
 
      /**
@@ -30,7 +42,7 @@ class UserController extends Controller
      */
     public function showAdminAll()
     {
-        return 'Список адміністраторів.';
+        return view('Users.adminsAll');
     }
 
     /**
@@ -40,6 +52,6 @@ class UserController extends Controller
      */
     public function showAdmin($id)
     {
-        return 'Адміністратор (користувач id=' . $id .').';
+        return view('Users.admin', ['id' => $id,]);
     }
 }
