@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CityController;
+use Illuminate\Support\Facades\View;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +19,7 @@ use App\Http\Controllers\CityController;
 
 // routes for p.1
 Route::get('/', function () {
-    return 'Головна сторінка сайту';
+    return View::make('main', ['name' => 'Tetiana', 'surname' => 'Harkusha']);
 })->name('main');
 
 //grouped routes 'posts' and used controller
