@@ -17,16 +17,14 @@ class UserController extends Controller
         $title = 'user-' . $id;
         $title .= (($name == '') ? '' : ('-' . $name));
 
-        if (!is_numeric($id)) {
-            ${($name == '') ? 'name' : 'surname'} = $id;
-            unset($id);
-        }
-
-        return view('Users.user', [
+        return view('Users.newUser', [
             'title' => $title,
-            'id' => $id??'',
-            'name' => $name??'',
-            'surname' => $surname??'']);
+            'content' => '<h1>Інформація про користувача:</h1>',
+            'id' => $id,
+            'name' => $name,
+            'age' => 33,
+            'salary' => 2500,
+        ]);
     }
 
     /**
@@ -34,7 +32,10 @@ class UserController extends Controller
      */
     public function showAll()
     {
-        return view('Users.usersAll');
+        return view('Users.newUser', [
+            'title' => 'users-all',
+            'content' => file_get_contents(__DIR__ . '/../../../resources/Contents/usersAll.html')
+        ]);
     }
 
      /**
@@ -42,7 +43,10 @@ class UserController extends Controller
      */
     public function showAdminAll()
     {
-        return view('Users.adminsAll');
+        return view('Users.newUser', [
+            'title' => 'admins-all',
+            'content' => file_get_contents(__DIR__ . '/../../../resources/Contents/adminsAll.html')
+        ]);
     }
 
     /**
@@ -52,6 +56,11 @@ class UserController extends Controller
      */
     public function showAdmin($id)
     {
-        return view('Users.admin', ['id' => $id,]);
+        return view('Users.newUser', [
+            'title' => 'admin-' . $id,
+            'id' => $id,
+            'name' => '',
+            'content' => '<h1>Інформація про адміністратора:</h1>'
+        ]);
     }
 }
