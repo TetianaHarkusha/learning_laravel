@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CityController;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,8 +20,12 @@ use Illuminate\Support\Facades\View;
 
 // routes for p.1
 Route::get('/', function () {
-    return View::make('main');
+    return View::make('Pages.main', ['title' => 'StadyLaravel-main']);
 })->name('main');
+
+Route::get('/homework', function () {
+    return View::make('Pages.homework');
+})->name('homework');
 
 //grouped routes 'posts' and used controller
 Route::name('allPosts')->prefix('posts')->group(function () {
@@ -48,6 +53,9 @@ Route::prefix('user')->name('user.')->group(function () {
     Route::get('/all', [UserController::class, 'showAll'])
     ->name('all');
 
+    Route::get('/query/{id?}', [UserController::class, 'showByQuery'])
+    ->name('query');
+
     Route::get('/{name}', [UserController::class,'show'])
     ->whereAlpha('name')->name('name');
 
@@ -73,4 +81,12 @@ Route::get('/{year}/{month}/{day}', function ($year, $month, $day) {
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/users', [UserController::class, 'showAdminAll'])->name('all');
     Route::get('/user/{id}', [UserController::class, 'showAdmin'])->name('user');
+});
+
+Route::get('/clear', function () {
+    Artisan::call('cache:clear');
+    Artisan::call('config:cache');
+    Artisan::call('view:clear');
+    Artisan::call('route:clear');
+    return "Кэш очищен.";
 });
