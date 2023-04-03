@@ -6,25 +6,14 @@ use Illuminate\View\Component;
 
 class menu extends Component
 {
-    public $class;
-    public $liClass;
-    public $aClassFirst;
-    public $aClass;
     /**
      * Create a new component instance.
      *
-     * @param string $class
-     * @param string $liClass
-     * @param string $aClassFirst
-     * @param string $aClass
      * @return void
      */
-    public function __construct(string $class, string $liClass, string $aClassFirst, string $aClass)
+    public function __construct()
     {
-        $this->class = $class;
-        $this->liClass = $liClass;
-        $this->aClassFirst = $aClassFirst;
-        $this->aClass = $aClass;
+        //
     }
 
     /**
