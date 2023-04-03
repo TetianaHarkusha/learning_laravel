@@ -1,5 +1,5 @@
 <div>
-<table class="table table-striped">
+<table {{$attributes}}>
     <thead>
         <tr>
         @foreach($columnNames as $columnName)
