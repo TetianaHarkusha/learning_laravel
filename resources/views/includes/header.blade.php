@@ -7,8 +7,7 @@
     
     <x-menu class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
         <x-slot:li></x-slot:li>
-        <x-slot:a-first class="nav-link px-2 text-secondary"></x-slot:a-first>
-        <x-slot:a class="nav-link px-2 link-dark"></x-slot:a>
+        <x-slot:a class="nav-link px-2">link-secondary</x-slot:a>
     </x-menu>
 
     <div class="col-md-3 text-end">

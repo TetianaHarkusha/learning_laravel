@@ -7,7 +7,7 @@ use Illuminate\View\Component;
 class Table extends Component
 {
     public $columnNames;
-    public $users;
+    public $records;
     /**
      * Create a new component instance.
      *
@@ -15,10 +15,10 @@ class Table extends Component
      * @param array $user
      * @return void
      */
-    public function __construct($columnNames, $users)
+    public function __construct($columnNames, $records)
     {
         $this->columnNames = $columnNames;
-        $this->users = $users;
+        $this->records = $records;
     }
 
     /**

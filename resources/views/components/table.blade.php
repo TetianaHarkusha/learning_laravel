@@ -8,9 +8,9 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($users as $user)
+        @foreach($records as $record)
         <tr>
-            @foreach($user as $field)
+            @foreach($record as $field)
                 @if ($loop->first)
                     <th>{{$field}}</th>
                 @else
