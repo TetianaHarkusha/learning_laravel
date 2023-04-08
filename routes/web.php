@@ -23,9 +23,10 @@ Route::get('/', function () {
     return view('Pages.main', ['title' => 'StadyLaravel-main']);
 })->name('main');
 
-Route::get('/homework', function () {
-    return View::make('Pages.homework');
-})->name('homework');
+Route::name('homework')->prefix('homework')->group(function () {
+    Route::get('', function () {return view('Pages.homework.list', ['title' => 'Homework']);})->name('.list');
+    Route::get('/{id}', function ($id) {return view('Pages.homework.lesson'. $id, ['title' => 'Homework']);})->name('.lesson');
+});
 
 //grouped routes 'posts' and used controller
 Route::name('allPosts')->prefix('posts')->group(function () {
@@ -55,6 +56,9 @@ Route::prefix('user')->name('user.')->group(function () {
 
     Route::get('/query/{id?}', [UserController::class, 'showByQuery'])
     ->name('query');
+
+    Route::get('/Eloquent/{id?}', [UserController::class, 'showByQuery'])
+    ->name('query.Eloquent');
 
     Route::get('/{name}', [UserController::class,'show'])
     ->whereAlpha('name')->name('name');
