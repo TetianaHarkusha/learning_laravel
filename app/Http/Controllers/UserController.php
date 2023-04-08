@@ -63,7 +63,7 @@ class UserController extends Controller
     }
 
     /**
-     * Show  users by queries in lesson7
+     * Show  users by queries in lesson7 (using facade DB)
      */
     public function showByQuery($id)
     {
