@@ -44,7 +44,8 @@ Route::get('/dir/test', function () {
 
 //grouped routes 'name' and used controller
 Route::prefix('user')->name('user.')->group(function () {
-    Route::get('/all', [UserController::class, 'showAll']);
+    Route::get('/all', [UserController::class, 'showAll'])
+    ->name('all');
 
     Route::get('/{name}', [UserController::class,'show'])
     ->whereAlpha('name')->name('name');
