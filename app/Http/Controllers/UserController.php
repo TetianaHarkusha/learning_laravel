@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -128,6 +129,82 @@ class UserController extends Controller
                 break;
             default: return redirect()->route('homework');
         };
+        return view('Pages.user', [
+            'title' => 'users-by-query',
+            'topic' => 'Список користувачів за запитом:',
+            'columnNames' => $columnNames,
+            'users' => $users,
+            'id' => $id,
+        ]);
+    }
+
+    /**
+     * Show  users by queries in lesson8 (using model User)
+     */
+    public function showByEloquent($id)
+    {
+        //all column names of table 'user' in array
+        $user = User::firstOrFail()->getAttributes();
+        $columnNames = array_keys($user);
+        switch ($id) {
+            case 1://p.2 All records from table 'user'
+                $users = User::paginate(10);
+                break;
+            case 2://p.4 Only columns 'name' and 'email'
+                $columnNames = ['name', 'email'];
+                $users = User::select('name', 'email')->paginate(10);
+                break;
+            case 3://p.5 Rename column 'email' to 'user_email'
+                $columnNames = ['name', 'user_email'];
+                $users = User::select('name', 'email as user_email')->paginate(10);
+                break;
+            case 4://p.6 Users with age = 30
+                $users = User::where('age', 30)->paginate(10);
+                break;
+            case 5://p.6 Users with age <> 30
+                $users = User::where('age', '<>', 30)->paginate(10);
+                break;
+            case 6://p.6 Users with age > 30
+                $users = User::where('age', '>', 30)->paginate(10);
+                break;
+            case 7://p.6 Users with age < 30
+                $users = User::where('age', '<', 30)->paginate(10);
+                break;
+            case 8://p.6 Users with age <= 30
+                $users = User::where('age', '<=', 30)->paginate(10);
+                break;
+            case 9://p.7 Users with age between 20 and 30
+                $users = User::whereBetween('age', [20, 30])->paginate(10);
+                break;
+            case 10://p.8 Users with age=30 or salary=500 or id>4
+                $users = User::where('age', 30)->orWhere('salary', 500)->orWhere('id', '>', 4)->paginate(10);
+                break;
+            case 11://p.9 Users with age between 20 and 30 or salary between 400 and 800
+                $users = User::whereBetween('age', [20, 30])->orWhereBetween('salary', [400, 800])->paginate(10);
+                break;
+            case 12://p.10 Users without age between 30 and 40 order by 'salary' decrease
+                $users = User::whereNotBetween('age', [30, 40])->orderByDesc('salary')->paginate(10);
+                break;
+            case 13://p.11 Collection of names.
+                $columnNames = ['name'];
+                $users = User::select(User::raw("left(ltrim(name), locate(' ', ltrim(name))-1) as name") )
+                    ->distinct()->paginate(10);
+                break;
+            case 14: //p.12 All users sorted in random order.
+                $users = User::inRandomOrder()->paginate(10);
+                break;
+            case 15://p.13 One random
+                $users[] = User::inRandomOrder()->first();
+                break;
+            case 16://p.14 The first thee users with age=30
+                $users = User::where('age', 30)->take(3)->get();
+                break;
+            case 17://p.15 ten users with age=30 start 3rd
+                $users = User::where('age', '=', 30)->skip(2)->take(10)->get();
+                break;
+            default: return redirect()->route('homework');
+        };
+        //dd ($users);
         return view('Pages.user', [
             'title' => 'users-by-query',
             'topic' => 'Список користувачів за запитом:',

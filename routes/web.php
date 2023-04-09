@@ -57,7 +57,7 @@ Route::prefix('user')->name('user.')->group(function () {
     Route::get('/query/{id?}', [UserController::class, 'showByQuery'])
     ->name('query');
 
-    Route::get('/Eloquent/{id?}', [UserController::class, 'showByQuery'])
+    Route::get('/Eloquent/{id?}', [UserController::class, 'showByEloquent'])
     ->name('query.Eloquent');
 
     Route::get('/{name}', [UserController::class,'show'])
