@@ -15,16 +15,31 @@ class UserController extends Controller
      */
     public function show($id, $name = '')
     {
+        $columnNames = DB::getSchemaBuilder()->getColumnListing('users');
+        $query = DB::table('users');
+
         $title = 'user-' . $id;
         $title .= (($name == '') ? '' : ('-' . $name));
 
-        return view('Users.newUser', [
+        if (is_numeric($id)) {
+            $name = ucfirst($name);
+            $query = $query->where('id', $id);
+        } else {
+            $name = trim(ucfirst($name) . ' ' . ucfirst($id));
+            unset($id);
+        }
+        
+        if ($name <> '') { 
+            $query = $query->where('name', 'like', "%$name%");
+        }
+        
+        $users = $query->paginate(10);
+
+        return view('Pages.user', [
             'title' => $title,
-            'content' => '<h1>Інформація про користувача:</h1>',
-            'id' => $id,
-            'name' => $name,
-            'age' => 33,
-            'salary' => 2500,
+            'topic' => 'Інформація про користувача(-ів):',
+            'columnNames' => $columnNames,
+            'users' => $users,
         ]);
     }
 
@@ -41,7 +56,7 @@ class UserController extends Controller
 
         return view('Pages.user', [
             'title' => 'users-all',
-            'content' => "<h3>Список користувачів</h3>",
+            'topic' => 'Список користувачів:',
             'columnNames' => $columnNames,
             'users' => $users,
         ]);
@@ -82,7 +97,6 @@ class UserController extends Controller
                 $users = DB::table('users')->where('age', '<=', 30)->paginate(10);
                 break;
             case 9://p.7 Users with age between 20 and 30
-                $columnNames = DB::getSchemaBuilder()->getColumnListing('users');
                 $users = DB::table('users')->whereBetween('age', [20, 30])->paginate(10);
                 break;
             case 10://p.8 Users with age=30 or salary=500 or id>4
@@ -92,7 +106,7 @@ class UserController extends Controller
                 $users = DB::table('users')->whereBetween('age', [20, 30])->orWhereBetween('salary', [400, 800])->paginate(10);
                 break;
             case 12://p.10 Users without age between 30 and 40 order by 'salary' decrease
-                $users = DB::table('users')->whereNotBetween('age', [30, 40])->orderBy('salary', 'desc')->paginate(10);
+                $users = DB::table('users')->whereNotBetween('age', [30, 40])->orderByDesc('salary')->paginate(10);
                 break;
             case 13://p.11 Collection of names.
                 $columnNames = ['name'];
@@ -116,7 +130,7 @@ class UserController extends Controller
         };
         return view('Pages.user', [
             'title' => 'users-by-query',
-            'content' => '<h1>Список користувачів за запитом</h1>',
+            'topic' => 'Список користувачів за запитом:',
             'columnNames' => $columnNames,
             'users' => $users,
             'id' => $id,
@@ -128,9 +142,9 @@ class UserController extends Controller
      */
     public function showAdminAll()
     {
-        return view('Users.newUser', [
+        return view('Pages.admin', [
             'title' => 'admins-all',
-            'content' => file_get_contents(__DIR__ . '/../../../resources/Contents/adminsAll.html')
+            'topic' => 'Список адміністраторів:'
         ]);
     }
 
@@ -141,11 +155,11 @@ class UserController extends Controller
      */
     public function showAdmin($id)
     {
-        return view('Users.newUser', [
+        return view('Pages.admin', [
             'title' => 'admin-' . $id,
             'id' => $id,
             'name' => '',
-            'content' => '<h1>Інформація про адміністратора:</h1>'
+            'topic' => 'Інформація про адміністратора:'
         ]);
     }
 }

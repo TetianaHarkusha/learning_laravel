@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Artisan;
 
 // routes for p.1
 Route::get('/', function () {
-    return View::make('Pages.main', ['title' => 'StadyLaravel-main']);
+    return view('Pages.main', ['title' => 'StadyLaravel-main']);
 })->name('main');
 
 Route::get('/homework', function () {
@@ -83,10 +83,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/user/{id}', [UserController::class, 'showAdmin'])->name('user');
 });
 
-Route::get('/clear', function () {
-    Artisan::call('cache:clear');
-    Artisan::call('config:cache');
-    Artisan::call('view:clear');
-    Artisan::call('route:clear');
-    return "Кэш очищен.";
-});
+//my help route for only local environment 
+if (app()->environment() == 'local') {
+    Route::get('/clear', function () {
+        Artisan::call('cache:clear');
+        Artisan::call('config:cache');
+        Artisan::call('view:clear');
+        Artisan::call('route:clear');
+        return "Кэш очищен.";
+    });
+}

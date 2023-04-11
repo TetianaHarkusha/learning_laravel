@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    {!!$content!!}
+    <h3> {{$topic}} </h3>
 
     @isset($users)
 
