@@ -52,7 +52,7 @@
         "format":[
             "./vendor/bin/php-cs-fixer fix routes",
             "./vendor/bin/php-cs-fixer fix app",
-            "./vendor/bin/php-cs-fixer fix database"
+            "./vendor/bin/php-cs-fixer fix resources"   
         ]
 
     },
