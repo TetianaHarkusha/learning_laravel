@@ -127,7 +127,7 @@ class UserController extends Controller
             case 17://p.15 ten users with age=30 start 3rd
                 $users = DB::table('users')->where('age', '=', 30)->skip(2)->take(10)->get();
                 break;
-            default: return redirect()->route('homework');
+            default: return redirect()->route('homework.list');
         };
         return view('Pages.user', [
             'title' => 'users-by-query',
@@ -202,7 +202,7 @@ class UserController extends Controller
             case 17://p.15 ten users with age=30 start 3rd
                 $users = User::where('age', '=', 30)->skip(2)->take(10)->get();
                 break;
-            default: return redirect()->route('homework');
+            default: return redirect()->route('homework.list');
         };
         return view('Pages.user', [
             'title' => 'users-by-query',
@@ -261,17 +261,35 @@ class UserController extends Controller
      * Update the specified user in storage.
      *
      * @param  \App\Http\Requests $req
-     * @param  \App\Models\User  $user
      */
-    public function update(Request $req, User $user)
+    public function update(Request $req)
     {
-        $user::find($req->input('id'))->update([
+        $user = User::find($req->input('id'))->update([
             'name' => $req->input('name'),
             'email' => $req->input('email'),
             'age' => $req->input('age'),
             'salary' => $req->input('salary')
         ]);
         return redirect()->route('user.id', ['id' => $req->input('id')]);
+    }
+
+    /**
+     * Deleted users from storage by queries for lesson8.
+     *
+     * @param  \App\Models\User  $user
+     */
+    public function destroy($id)
+    {
+        switch ($id) {
+            case 1://p.8 Remove all users over 30 from the table.
+                $deleted = User::where('age', '>', 30)->delete();
+                break;
+            case 2://p.9 Remove users with id 4,5,6.
+                $deleted = User::destroy([4, 5, 6]);
+                break;
+        default: return redirect()->route('homework.list');
+        };
+        return redirect()->route('homework.list');
     }
 
     /**

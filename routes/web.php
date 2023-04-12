@@ -70,6 +70,9 @@ Route::prefix('user')->name('user.')->group(function () {
     Route::post('/update', [UserController::class, 'update'])
     ->name('update');
 
+    Route::get('/delete/{id}', [UserController::class, 'destroy'])
+    ->name('delete');
+    
     Route::get('/query/{id?}', [UserController::class, 'showByQuery'])
     ->name('query');
 
