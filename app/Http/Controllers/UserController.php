@@ -276,20 +276,32 @@ class UserController extends Controller
     /**
      * Deleted users from storage by queries for lesson8.
      *
-     * @param  \App\Models\User  $user
      */
     public function destroy($id)
     {
         switch ($id) {
             case 1://p.8 Remove all users over 30 from the table.
-                $deleted = User::where('age', '>', 30)->delete();
+                $deleted = User::where('age', '>', 30)->forceDelete();
                 break;
             case 2://p.9 Remove users with id 4,5,6.
-                $deleted = User::destroy([4, 5, 6]);
+                $deleted = User::whereIn('id',[4, 5, 6])->forceDelete();
+                break;
+            case 3://p.10 Soft deletion for users
+                $deleted = User::where('age', '>', 20)->delete();
                 break;
         default: return redirect()->route('homework.list');
         };
         return redirect()->route('homework.list');
+    }
+
+    /**
+     * Restored soft deleted users from storage.
+     *
+     */
+    public function restore()
+    {
+        $restored = User::withTrashed()->restore();
+        return redirect()->route('user.all');
     }
 
     /**

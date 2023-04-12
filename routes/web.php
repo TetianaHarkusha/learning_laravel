@@ -72,6 +72,9 @@ Route::prefix('user')->name('user.')->group(function () {
 
     Route::get('/delete/{id}', [UserController::class, 'destroy'])
     ->name('delete');
+
+    Route::get('/restore', [UserController::class, 'restore'])
+    ->name('restore');
     
     Route::get('/query/{id?}', [UserController::class, 'showByQuery'])
     ->name('query');
