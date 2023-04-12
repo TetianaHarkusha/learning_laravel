@@ -29,11 +29,11 @@ class UserController extends Controller
             $name = trim(ucfirst($name) . ' ' . ucfirst($id));
             unset($id);
         }
-        
-        if ($name <> '') { 
+
+        if ($name <> '') {
             $query = $query->where('name', 'like', "%$name%");
         }
-        
+
         $users = $query->paginate(10);
 
         return view('Pages.user', [
@@ -187,7 +187,7 @@ class UserController extends Controller
                 break;
             case 13://p.11 Collection of names.
                 $columnNames = ['name'];
-                $users = User::select(User::raw("left(ltrim(name), locate(' ', ltrim(name))-1) as name") )
+                $users = User::select(User::raw("left(ltrim(name), locate(' ', ltrim(name))-1) as name"))
                     ->distinct()->paginate(10);
                 break;
             case 14: //p.12 All users sorted in random order.
@@ -204,7 +204,6 @@ class UserController extends Controller
                 break;
             default: return redirect()->route('homework');
         };
-        //dd ($users);
         return view('Pages.user', [
             'title' => 'users-by-query',
             'topic' => 'Список користувачів за запитом:',
@@ -213,8 +212,69 @@ class UserController extends Controller
             'id' => $id,
         ]);
     }
+    /**
+     * Show the form for creating a new user.
+     *
+     */
+    public function create()
+    {
+        return view('Pages.user-form', [
+            'title' => 'create-user',
+            'topic' => 'Форма для створення нового користувача:',
+            'user' => '',
+            'action' => 'user.store',
+        ]);
+    }
 
-     /**
+    /**
+     * Store a newly created user in storage.
+     *
+     * @param  \Illuminate\Http\Request  $req
+     */
+    public function store(Request $req)
+    {
+        $user = User::create([
+            'name' => $req->input('name'),
+            'email' => $req->input('email'),
+            'age' => $req->input('age'),
+            'salary' => $req->input('salary')
+        ]);
+        return redirect()->route('user.id', ['id' => $user->id]);
+    }
+
+    /**
+     * Show the form for editing one random user
+     *
+     */
+    public function edit()
+    {
+        $user = User::inRandomOrder()->first();
+        return view('Pages.user-form', [
+            'title' => 'update-user',
+            'topic' => 'Форма для зміни користувача:',
+            'user' => $user,
+            'action' => 'user.update',
+        ]);
+    }
+
+    /**
+     * Update the specified user in storage.
+     *
+     * @param  \App\Http\Requests $req
+     * @param  \App\Models\User  $user
+     */
+    public function update(Request $req, User $user)
+    {
+        $user::find($req->input('id'))->update([
+            'name' => $req->input('name'),
+            'email' => $req->input('email'),
+            'age' => $req->input('age'),
+            'salary' => $req->input('salary')
+        ]);
+        return redirect()->route('user.id', ['id' => $req->input('id')]);
+    }
+
+    /**
      * Show all users-admins
      */
     public function showAdminAll()

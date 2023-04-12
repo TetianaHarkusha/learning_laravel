@@ -24,8 +24,12 @@ Route::get('/', function () {
 })->name('main');
 
 Route::name('homework')->prefix('homework')->group(function () {
-    Route::get('', function () {return view('Pages.homework.list', ['title' => 'Homework']);})->name('.list');
-    Route::get('/{id}', function ($id) {return view('Pages.homework.lesson'. $id, ['title' => 'Homework']);})->name('.lesson');
+    Route::get('', function () {
+        return view('Pages.homework.list', ['title' => 'Homework']);
+    })->name('.list');
+    Route::get('/{id}', function ($id) {
+        return view('Pages.homework.lesson'. $id, ['title' => 'Homework']);
+    })->name('.lesson');
 });
 
 //grouped routes 'posts' and used controller
@@ -53,6 +57,18 @@ Route::get('/dir/test', function () {
 Route::prefix('user')->name('user.')->group(function () {
     Route::get('/all', [UserController::class, 'showAll'])
     ->name('all');
+
+    Route::get('/create', [UserController::class, 'create'])
+    ->name('create');
+
+    Route::post('/store', [UserController::class, 'store'])
+    ->name('store');
+
+    Route::get('/edit', [UserController::class, 'edit'])
+    ->name('edit');
+
+    Route::post('/update', [UserController::class, 'update'])
+    ->name('update');
 
     Route::get('/query/{id?}', [UserController::class, 'showByQuery'])
     ->name('query');
@@ -87,7 +103,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/user/{id}', [UserController::class, 'showAdmin'])->name('user');
 });
 
-//my help route for only local environment 
+//my help route for only local environment
 if (app()->environment() == 'local') {
     Route::get('/clear', function () {
         Artisan::call('cache:clear');
