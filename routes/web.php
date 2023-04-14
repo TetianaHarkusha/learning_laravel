@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserDoubleController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CityController;
 use Illuminate\Support\Facades\View;
@@ -82,6 +84,14 @@ Route::prefix('user')->name('user.')->group(function () {
     Route::get('/Eloquent/{id?}', [UserController::class, 'showByEloquent'])
     ->name('query.Eloquent');
 
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/one', [UserDoubleController::class, 'showOneWithProfile'])
+        ->name('one');
+
+        Route::get('/all', [UserDoubleController::class, 'showAllWithProfiles'])
+        ->name('all');
+    });
+
     Route::get('/{name}', [UserController::class,'show'])
     ->whereAlpha('name')->name('name');
 
@@ -94,6 +104,10 @@ Route::prefix('user')->name('user.')->group(function () {
     Route::get('/{id}/{name}', [UserController::class, 'show'])
     ->whereNumber('id')->where('name', '[a-z]{2,}')->name('idName');
 });
+
+//route for profiles
+Route::get('/profile/user/all', [ProfileController::class, 'showAllWithUsers'])
+->name('profile.user.all');
 
 // used controller for city
 Route::get('/city/{city?}', [CityController::class, 'show'])->name('city');
