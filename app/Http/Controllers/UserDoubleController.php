@@ -16,7 +16,7 @@ class UserDoubleController extends Controller
         $user = UserDouble::inRandomOrder()->first();
         $columnNames [0]= array_keys($user->getAttributes());
         $columnNames['profile'] = array_keys(Profile::firstOrFail()->getAttributes());
-        
+
         return view('Pages.user-one', [
             'title' => 'user-with-profile',
             'topic' => 'Інформація про користувача  (з профайлом):',
@@ -33,8 +33,8 @@ class UserDoubleController extends Controller
         $user = UserDouble::first();
         $columnNames [0]= array_keys($user->getAttributes());
         $columnNames['profile'] = ['id', 'name', 'surname', 'email'];
-        $users = UserDouble::paginate(10);
-        
+        $users = UserDouble::with('profile')->paginate(10);
+
         return view('Pages.user', [
             'title' => 'users-with-profiles',
             'topic' => 'Інформація про користувачів (з профайлами):',
