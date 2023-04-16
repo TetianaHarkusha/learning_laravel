@@ -284,12 +284,12 @@ class UserController extends Controller
                 $deleted = User::where('age', '>', 30)->forceDelete();
                 break;
             case 2://p.9 Remove users with id 4,5,6.
-                $deleted = User::whereIn('id',[4, 5, 6])->forceDelete();
+                $deleted = User::whereIn('id', [4, 5, 6])->forceDelete();
                 break;
             case 3://p.10 Soft deletion for users
                 $deleted = User::where('age', '>', 20)->delete();
                 break;
-        default: return redirect()->route('homework.list');
+            default: return redirect()->route('homework.list');
         };
         return redirect()->route('homework.list');
     }

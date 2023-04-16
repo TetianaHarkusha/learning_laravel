@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+//class for table 'user' for the connection 'mysql2'
 class UserDouble extends Model
 {
     use HasFactory;
-    
+
     /**
      * The table associated with the model.
      *
@@ -28,6 +29,6 @@ class UserDouble extends Model
      */
     public function profile()
     {
-        return $this->hasOne(Profile::class, 'user_id')->withDefault();;
+        return $this->hasOne(Profile::class, 'user_id')->withDefault();
     }
 }
