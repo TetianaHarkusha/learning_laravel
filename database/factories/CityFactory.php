@@ -21,9 +21,8 @@ class CityFactory extends Factory
             return $digit % 1000 === 0;
         };
         return [
-            'country' => $this->faker->country(),
-            'city' => $this->faker->city(),
-            'population' => $this->faker->valid($populationValidator)->numberBetween(1000,1000000),
+            'name' => fake()->city(),
+            'population' => fake()->valid($populationValidator)->numberBetween(1000,500000),
         ];
     }
 }

@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class City extends Model
+class Country extends Model
 {
     use HasFactory;
 
     /**
-     * Get the country in which the city is located.
+     * Get the cities associated with the country.
      */
-    public function country()
+    public function cities()
     {
-        return $this->belongsTo(Country::class);
+        return $this->hasMany(City::class);
     }
 }
