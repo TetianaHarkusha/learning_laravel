@@ -64,6 +64,70 @@ class UserController extends Controller
     }
 
     /**
+     * Show one user with relationships for lesson10 p.15
+     */
+    public function showOneWithCityAndPosition()
+    {
+        $user = User::inRandomOrder()->first();
+        $columnNames [0]= array_keys($user->getAttributes());
+        $columnNames['city'] = ['name'];
+        $columnNames['position'] = ['name'];
+
+        return view('Pages.user-one', [
+            'title' => 'user-with-city-and-position',
+            'topic' => 'Інформація про користувача (з містом та позицією):',
+            'columnNames' => $columnNames,
+            'user' => $user,
+        ]);
+    }
+
+    /**
+     * Show all user with relationships for lesson10 p.15
+     */
+    public function showAllWithCityAndPosition()
+    {
+        $users = User::paginate(10);
+        $columnNames [0]= array_keys(User::first()->getAttributes());
+        $columnNames['city'] = ['name'];
+        $columnNames['position'] = ['name'];
+
+        return view('Pages.user', [
+            'title' => 'users-with-city-and-position',
+            'topic' => 'Список користувачів (з містом та позицією):',
+            'columnNames' => $columnNames,
+            'users' => $users,
+        ]);
+    }
+
+    /**
+     * Show all user with relationships by query for lesson10 p.15
+     */
+    public function showWithCityAndPositionQuery($id)
+    {
+        $users = User::paginate(10);
+        $columnNames [0]= array_keys(User::first()->getAttributes());
+        $columnNames['city'] = ['name'];
+        $columnNames['position'] = ['name'];
+
+        switch ($id) {
+            case 1://Users with age between 20 and 30
+                $users = User::whereBetween('age', [20, 30])->paginate(10);
+                break;
+            case 16://Users with age between 20 and 30
+                $users = DB::table('users')->where('age', 30)->take(3)->get();
+                break;
+        };
+
+        return view('Pages.user', [
+            'title' => 'users-with-city-and-position',
+            'topic' => 'Список користувачів за запитом (з містом та позицією):',
+            'columnNames' => $columnNames,
+            'users' => $users,
+            'id' =>$id,
+        ]);
+    }
+
+    /**
      * Show  users by queries in lesson7 (using facade DB)
      */
     public function showByQuery($id)

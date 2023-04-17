@@ -17,4 +17,20 @@ class User extends Model
      * @var array
      */
     protected $fillable = ['name', 'email', 'age', 'salary'];
+
+    /**
+     * Get the city in which the user is located.
+     */
+    public function city()
+    {
+        return $this->belongsTo(City::class)->withDefault();
+    }
+
+     /**
+     * Get the city in which the user is worked.
+     */
+    public function position()
+    {
+        return $this->belongsTo(Position::class)->withDefault();
+    }
 }

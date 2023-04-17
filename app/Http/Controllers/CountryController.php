@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Country;
+use App\Models\City;
 
 class CountryController extends Controller
 {
@@ -34,6 +35,26 @@ class CountryController extends Controller
         return view('Pages.city', [
             'title' => 'countries-with-cities',
             'topic' => $topic,
+            'columnNames' => $columnNames,
+            'countries' => $countries,
+        ]);
+    }
+
+    /**
+     * Show all countries with cities without users lesson10 p.15
+     */
+    public function showWithUsers()
+    {
+        //the names of the required columns of the tables
+        $columnNames[0] = array_keys(Country::firstOrFail()->getAttributes());
+        $columnNames['cities'] = ['id', 'name', 'population', 'country_id'];
+        $countries = Country::with(['cities' => function ($query) {
+            $query->select('id', 'name', 'population', 'country_id')->has('users')->orderBy('population');
+        }])->paginate(5);
+
+        return view('Pages.city', [
+            'title' => 'city-without-user',
+            'topic' => 'Інформація про країни з містами, відсортованими за зростаннем населення з зареєстрованми користувачами:',
             'columnNames' => $columnNames,
             'countries' => $countries,
         ]);

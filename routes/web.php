@@ -36,13 +36,13 @@ Route::name('homework')->prefix('homework')->group(function () {
     })->name('.lesson');
 });
 
-//grouped routes 'posts' 
+//grouped routes 'posts'
 Route::name('allPosts')->prefix('posts')->group(function () {
     Route::get('', [PostController::class, 'showAll']);
     Route::get('/{date}', [PostController::class, 'showAll'])->name('.date');
 });
 
-// grouped routes 'post' 
+// grouped routes 'post'
 Route::prefix('post')->name('post.')->group(function () {
     Route::get('/{id}', [PostController::class,'show'])->name('postId');
     Route::get('/{catId}/{postId}', [PostController::class, 'show'])->name('catAndPostId');
@@ -52,12 +52,13 @@ Route::prefix('post')->name('post.')->group(function () {
 Route::get('/test', function () {
     return 'Тестова сторінка';
 })->name('test');
+//Route::get('/test', [CityController::class, 'test']);
 
 Route::get('/dir/test', function () {
     return 'Тестова сторінка в dir';
 })->name('dirTest');
 
-//grouped routes 'name' 
+//grouped routes 'name'
 Route::prefix('user')->name('user.')->group(function () {
     Route::get('/all', [UserController::class, 'showAll'])
     ->name('all');
@@ -86,13 +87,25 @@ Route::prefix('user')->name('user.')->group(function () {
     Route::get('/Eloquent/{id?}', [UserController::class, 'showByEloquent'])
     ->name('query.Eloquent');
 
-    //grouped routes 'user.profole'
+    //grouped routes 'user.profile' user with relationship profile
     Route::prefix('profile')->name('profile.')->group(function () {
         Route::get('/one', [UserDoubleController::class, 'showOneWithProfile'])
         ->name('one');
 
         Route::get('/all', [UserDoubleController::class, 'showAllWithProfiles'])
         ->name('all');
+    });
+
+    //grouped routes 'user.city.position' - user with relationships city and position
+    Route::prefix('city')->name('city.')->group(function () {
+        Route::prefix('position')->name('position.')->group(function () {
+            Route::get('one', [UserController::class, 'showOneWithCityAndPosition'])
+            ->name('one');
+            Route::get('all', [UserController::class, 'showAllWithCityAndPosition'])
+            ->name('all');
+            Route::get('query/{id}', [UserController::class, 'showWithCityAndPositionQuery'])
+            ->name('query');
+        });
     });
 
     Route::get('/{name}', [UserController::class,'show'])
@@ -113,8 +126,10 @@ Route::get('/profile/user/all', [ProfileController::class, 'showAllWithUsers'])
 ->name('profile.user.all');
 
 //route for country
-Route::get('/country/city/{id}', [CountryController::class, 'showAllWithCities'])
-->name('country.city');
+Route::prefix('country')->name('country.')->group(function () {
+    Route::get('/withUser', [CountryController::class, 'showWithUsers'])->name('city.withUser');
+    Route::get('/city/{id}', [CountryController::class, 'showAllWithCities'])->name('city');
+});
 
 // grouped controller city
 Route::prefix('city')->name('city.')->group(function () {
@@ -142,4 +157,4 @@ if (app()->environment() == 'local') {
         Artisan::call('route:clear');
         return "Кэш очищен.";
     });
-}
+};
