@@ -8,6 +8,5 @@
     <x-menu class="nav col-md-4 justify-content-end">
         <x-slot:li class="nav-item"></x-slot:li>
         <x-slot:a class="nav-link px-2 text-body-secondary"></x-slot:a>
-        <x-slot:a-first class="nav-link px-2 text-body-secondary"></x-slot:a-first>
     </x-menu>
 </footer>

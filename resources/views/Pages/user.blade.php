@@ -5,12 +5,12 @@
 @endsection
 
 @section('content')
-    {!!$content!!}
+    <h3> {{$topic}} </h3>
 
     @isset($users)
 
         @if(!isset($id) or $id < 15) {{ $users->links() }} @endif
-        <x-table class="table table-striped" :columnNames="$columnNames" :users="$users"></x-table>
+        <x-table class="table table-striped" :columnNames="$columnNames" :records="$users"></x-table>
 
     @endisset
   

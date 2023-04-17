@@ -20,12 +20,17 @@ use Illuminate\Support\Facades\Artisan;
 
 // routes for p.1
 Route::get('/', function () {
-    return View::make('Pages.main', ['title' => 'StadyLaravel-main']);
+    return view('Pages.main', ['title' => 'StadyLaravel-main']);
 })->name('main');
 
-Route::get('/homework', function () {
-    return View::make('Pages.homework');
-})->name('homework');
+Route::name('homework')->prefix('homework')->group(function () {
+    Route::get('', function () {
+        return view('Pages.homework.list', ['title' => 'Homework']);
+    })->name('.list');
+    Route::get('/{id}', function ($id) {
+        return view('Pages.homework.lesson'. $id, ['title' => 'Homework']);
+    })->name('.lesson');
+});
 
 //grouped routes 'posts' and used controller
 Route::name('allPosts')->prefix('posts')->group(function () {
@@ -53,8 +58,29 @@ Route::prefix('user')->name('user.')->group(function () {
     Route::get('/all', [UserController::class, 'showAll'])
     ->name('all');
 
+    Route::get('/create', [UserController::class, 'create'])
+    ->name('create');
+
+    Route::post('/store', [UserController::class, 'store'])
+    ->name('store');
+
+    Route::get('/edit', [UserController::class, 'edit'])
+    ->name('edit');
+
+    Route::post('/update', [UserController::class, 'update'])
+    ->name('update');
+
+    Route::get('/delete/{id}', [UserController::class, 'destroy'])
+    ->name('delete');
+
+    Route::get('/restore', [UserController::class, 'restore'])
+    ->name('restore');
+    
     Route::get('/query/{id?}', [UserController::class, 'showByQuery'])
     ->name('query');
+
+    Route::get('/Eloquent/{id?}', [UserController::class, 'showByEloquent'])
+    ->name('query.Eloquent');
 
     Route::get('/{name}', [UserController::class,'show'])
     ->whereAlpha('name')->name('name');
@@ -83,10 +109,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/user/{id}', [UserController::class, 'showAdmin'])->name('user');
 });
 
-Route::get('/clear', function () {
-    Artisan::call('cache:clear');
-    Artisan::call('config:cache');
-    Artisan::call('view:clear');
-    Artisan::call('route:clear');
-    return "Кэш очищен.";
-});
+//my help route for only local environment
+if (app()->environment() == 'local') {
+    Route::get('/clear', function () {
+        Artisan::call('cache:clear');
+        Artisan::call('config:cache');
+        Artisan::call('view:clear');
+        Artisan::call('route:clear');
+        return "Кэш очищен.";
+    });
+}

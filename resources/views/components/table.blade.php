@@ -8,15 +8,26 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($users as $user)
+        @foreach($records as $record)
         <tr>
-            @foreach($user as $field)
-                @if ($loop->first)
-                    <th>{{$field}}</th>
-                @else
-                    <td>{{$field}}</td>
-                @endif
-            @endforeach
+            {{--if using Eloquent --}}
+            @if($record instanceof Illuminate\Database\Eloquent\Model)
+                @foreach($columnNames as $columnName)
+                    @if ($columnName === 'id')
+                        <th>{{$record->$columnName}}</th>
+                    @else
+                        <td>{{$record->$columnName}}</td>
+                    @endif
+                @endforeach
+            @else {{--if using facade DB--}}
+                @foreach($record as $field)
+                    @if ($loop->first)
+                        <th>{{$field}}</th>
+                    @else
+                        <td>{{$field}}</td>
+                    @endif
+                @endforeach
+            @endif
         </tr>
         @endforeach
     </tbody>

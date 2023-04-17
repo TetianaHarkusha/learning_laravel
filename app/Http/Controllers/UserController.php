@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -15,16 +16,31 @@ class UserController extends Controller
      */
     public function show($id, $name = '')
     {
+        $columnNames = DB::getSchemaBuilder()->getColumnListing('users');
+        $query = DB::table('users');
+
         $title = 'user-' . $id;
         $title .= (($name == '') ? '' : ('-' . $name));
 
-        return view('Users.newUser', [
+        if (is_numeric($id)) {
+            $name = ucfirst($name);
+            $query = $query->where('id', $id);
+        } else {
+            $name = trim(ucfirst($name) . ' ' . ucfirst($id));
+            unset($id);
+        }
+
+        if ($name <> '') {
+            $query = $query->where('name', 'like', "%$name%");
+        }
+
+        $users = $query->paginate(10);
+
+        return view('Pages.user', [
             'title' => $title,
-            'content' => '<h1>Інформація про користувача:</h1>',
-            'id' => $id,
-            'name' => $name,
-            'age' => 33,
-            'salary' => 2500,
+            'topic' => 'Інформація про користувача(-ів):',
+            'columnNames' => $columnNames,
+            'users' => $users,
         ]);
     }
 
@@ -41,14 +57,14 @@ class UserController extends Controller
 
         return view('Pages.user', [
             'title' => 'users-all',
-            'content' => "<h3>Список користувачів</h3>",
+            'topic' => 'Список користувачів:',
             'columnNames' => $columnNames,
             'users' => $users,
         ]);
     }
 
     /**
-     * Show  users by queries in lesson7
+     * Show  users by queries in lesson7 (using facade DB)
      */
     public function showByQuery($id)
     {
@@ -82,7 +98,6 @@ class UserController extends Controller
                 $users = DB::table('users')->where('age', '<=', 30)->paginate(10);
                 break;
             case 9://p.7 Users with age between 20 and 30
-                $columnNames = DB::getSchemaBuilder()->getColumnListing('users');
                 $users = DB::table('users')->whereBetween('age', [20, 30])->paginate(10);
                 break;
             case 10://p.8 Users with age=30 or salary=500 or id>4
@@ -92,7 +107,7 @@ class UserController extends Controller
                 $users = DB::table('users')->whereBetween('age', [20, 30])->orWhereBetween('salary', [400, 800])->paginate(10);
                 break;
             case 12://p.10 Users without age between 30 and 40 order by 'salary' decrease
-                $users = DB::table('users')->whereNotBetween('age', [30, 40])->orderBy('salary', 'desc')->paginate(10);
+                $users = DB::table('users')->whereNotBetween('age', [30, 40])->orderByDesc('salary')->paginate(10);
                 break;
             case 13://p.11 Collection of names.
                 $columnNames = ['name'];
@@ -112,25 +127,191 @@ class UserController extends Controller
             case 17://p.15 ten users with age=30 start 3rd
                 $users = DB::table('users')->where('age', '=', 30)->skip(2)->take(10)->get();
                 break;
-            default: return redirect()->route('homework');
+            default: return redirect()->route('homework.list');
         };
         return view('Pages.user', [
             'title' => 'users-by-query',
-            'content' => '<h1>Список користувачів за запитом</h1>',
+            'topic' => 'Список користувачів за запитом:',
             'columnNames' => $columnNames,
             'users' => $users,
             'id' => $id,
         ]);
     }
 
-     /**
+    /**
+     * Show  users by queries in lesson8 (using model User)
+     */
+    public function showByEloquent($id)
+    {
+        //all column names of table 'user' in array
+        $user = User::firstOrFail()->getAttributes();
+        $columnNames = array_keys($user);
+        switch ($id) {
+            case 1://p.2 All records from table 'user'
+                $users = User::paginate(10);
+                break;
+            case 2://p.4 Only columns 'name' and 'email'
+                $columnNames = ['name', 'email'];
+                $users = User::select('name', 'email')->paginate(10);
+                break;
+            case 3://p.5 Rename column 'email' to 'user_email'
+                $columnNames = ['name', 'user_email'];
+                $users = User::select('name', 'email as user_email')->paginate(10);
+                break;
+            case 4://p.6 Users with age = 30
+                $users = User::where('age', 30)->paginate(10);
+                break;
+            case 5://p.6 Users with age <> 30
+                $users = User::where('age', '<>', 30)->paginate(10);
+                break;
+            case 6://p.6 Users with age > 30
+                $users = User::where('age', '>', 30)->paginate(10);
+                break;
+            case 7://p.6 Users with age < 30
+                $users = User::where('age', '<', 30)->paginate(10);
+                break;
+            case 8://p.6 Users with age <= 30
+                $users = User::where('age', '<=', 30)->paginate(10);
+                break;
+            case 9://p.7 Users with age between 20 and 30
+                $users = User::whereBetween('age', [20, 30])->paginate(10);
+                break;
+            case 10://p.8 Users with age=30 or salary=500 or id>4
+                $users = User::where('age', 30)->orWhere('salary', 500)->orWhere('id', '>', 4)->paginate(10);
+                break;
+            case 11://p.9 Users with age between 20 and 30 or salary between 400 and 800
+                $users = User::whereBetween('age', [20, 30])->orWhereBetween('salary', [400, 800])->paginate(10);
+                break;
+            case 12://p.10 Users without age between 30 and 40 order by 'salary' decrease
+                $users = User::whereNotBetween('age', [30, 40])->orderByDesc('salary')->paginate(10);
+                break;
+            case 13://p.11 Collection of names.
+                $columnNames = ['name'];
+                $users = User::select(User::raw("left(ltrim(name), locate(' ', ltrim(name))-1) as name"))
+                    ->distinct()->paginate(10);
+                break;
+            case 14: //p.12 All users sorted in random order.
+                $users = User::inRandomOrder()->paginate(10);
+                break;
+            case 15://p.13 One random
+                $users[] = User::inRandomOrder()->first();
+                break;
+            case 16://p.14 The first thee users with age=30
+                $users = User::where('age', 30)->take(3)->get();
+                break;
+            case 17://p.15 ten users with age=30 start 3rd
+                $users = User::where('age', '=', 30)->skip(2)->take(10)->get();
+                break;
+            default: return redirect()->route('homework.list');
+        };
+        return view('Pages.user', [
+            'title' => 'users-by-query',
+            'topic' => 'Список користувачів за запитом:',
+            'columnNames' => $columnNames,
+            'users' => $users,
+            'id' => $id,
+        ]);
+    }
+    /**
+     * Show the form for creating a new user.
+     *
+     */
+    public function create()
+    {
+        return view('Pages.user-form', [
+            'title' => 'create-user',
+            'topic' => 'Форма для створення нового користувача:',
+            'user' => '',
+            'action' => 'user.store',
+        ]);
+    }
+
+    /**
+     * Store a newly created user in storage.
+     *
+     * @param  \Illuminate\Http\Request  $req
+     */
+    public function store(Request $req)
+    {
+        $user = User::create([
+            'name' => $req->input('name'),
+            'email' => $req->input('email'),
+            'age' => $req->input('age'),
+            'salary' => $req->input('salary')
+        ]);
+        return redirect()->route('user.id', ['id' => $user->id]);
+    }
+
+    /**
+     * Show the form for editing one random user
+     *
+     */
+    public function edit()
+    {
+        $user = User::inRandomOrder()->first();
+        return view('Pages.user-form', [
+            'title' => 'update-user',
+            'topic' => 'Форма для зміни користувача:',
+            'user' => $user,
+            'action' => 'user.update',
+        ]);
+    }
+
+    /**
+     * Update the specified user in storage.
+     *
+     * @param  \App\Http\Requests $req
+     */
+    public function update(Request $req)
+    {
+        $user = User::find($req->input('id'))->update([
+            'name' => $req->input('name'),
+            'email' => $req->input('email'),
+            'age' => $req->input('age'),
+            'salary' => $req->input('salary')
+        ]);
+        return redirect()->route('user.id', ['id' => $req->input('id')]);
+    }
+
+    /**
+     * Deleted users from storage by queries for lesson8.
+     *
+     */
+    public function destroy($id)
+    {
+        switch ($id) {
+            case 1://p.8 Remove all users over 30 from the table.
+                $deleted = User::where('age', '>', 30)->forceDelete();
+                break;
+            case 2://p.9 Remove users with id 4,5,6.
+                $deleted = User::whereIn('id',[4, 5, 6])->forceDelete();
+                break;
+            case 3://p.10 Soft deletion for users
+                $deleted = User::where('age', '>', 20)->delete();
+                break;
+        default: return redirect()->route('homework.list');
+        };
+        return redirect()->route('homework.list');
+    }
+
+    /**
+     * Restored soft deleted users from storage.
+     *
+     */
+    public function restore()
+    {
+        $restored = User::withTrashed()->restore();
+        return redirect()->route('user.all');
+    }
+
+    /**
      * Show all users-admins
      */
     public function showAdminAll()
     {
-        return view('Users.newUser', [
+        return view('Pages.admin', [
             'title' => 'admins-all',
-            'content' => file_get_contents(__DIR__ . '/../../../resources/Contents/adminsAll.html')
+            'topic' => 'Список адміністраторів:'
         ]);
     }
 
@@ -141,11 +322,11 @@ class UserController extends Controller
      */
     public function showAdmin($id)
     {
-        return view('Users.newUser', [
+        return view('Pages.admin', [
             'title' => 'admin-' . $id,
             'id' => $id,
             'name' => '',
-            'content' => '<h1>Інформація про адміністратора:</h1>'
+            'topic' => 'Інформація про адміністратора:'
         ]);
     }
 }

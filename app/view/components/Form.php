@@ -4,21 +4,20 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class Table extends Component
+class Form extends Component
 {
-    public $columnNames;
-    public $records;
+    public $record;
     /**
      * Create a new component instance.
      *
-     * @param array $columnNames
-     * @param array $records
-     * @return void
+     *  @param array $record
+     *  @return void
      */
-    public function __construct($columnNames, $records)
+    public function __construct($record)
     {
-        $this->columnNames = $columnNames;
-        $this->records = $records;
+        if (isset($record)) {
+            $this->record = $record;
+        }
     }
 
     /**
@@ -28,6 +27,6 @@ class Table extends Component
      */
     public function render()
     {
-        return view('components.table');
+        return view('components.form.index');
     }
 }
