@@ -19,8 +19,8 @@ return new class extends Migration
         //add new columns 'city_id' and 'position_id'
         Schema::table('users', function (Blueprint $table) {
             $table->after('email', function ($table) {
-                $table->unsignedBigInteger('city_id')->constrained();
-                $table->unsignedBigInteger('position_id')->constrained();
+                $table->unsignedBigInteger('city_id')->nullable()->constrained();
+                $table->unsignedBigInteger('position_id')->nullable()->constrained();
             });
         });
 

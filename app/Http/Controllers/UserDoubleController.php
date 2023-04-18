@@ -17,7 +17,7 @@ class UserDoubleController extends Controller
         $columnNames [0]= array_keys($user->getAttributes());
         $columnNames['profile'] = array_keys(Profile::firstOrFail()->getAttributes());
 
-        return view('Pages.user-one', [
+        return view('Pages.User.user-one', [
             'title' => 'user-with-profile',
             'topic' => 'Інформація про користувача  (з профайлом):',
             'columnNames' => $columnNames,
@@ -35,7 +35,7 @@ class UserDoubleController extends Controller
         $columnNames['profile'] = ['id', 'name', 'surname', 'email'];
         $users = UserDouble::with('profile')->paginate(10);
 
-        return view('Pages.user', [
+        return view('Pages.User.user', [
             'title' => 'users-with-profiles',
             'topic' => 'Інформація про користувачів (з профайлами):',
             'columnNames' => $columnNames,

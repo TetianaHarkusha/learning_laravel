@@ -36,7 +36,7 @@ class UserController extends Controller
 
         $users = $query->paginate(10);
 
-        return view('Pages.user', [
+        return view('Pages.User.user', [
             'title' => $title,
             'topic' => 'Інформація про користувача(-ів):',
             'columnNames' => $columnNames,
@@ -55,7 +55,7 @@ class UserController extends Controller
         //all table rows with pagination
         $users = DB::table('users')->paginate(10);
 
-        return view('Pages.user', [
+        return view('Pages.User.user', [
             'title' => 'users-all',
             'topic' => 'Список користувачів:',
             'columnNames' => $columnNames,
@@ -73,7 +73,7 @@ class UserController extends Controller
         $columnNames['city'] = ['name'];
         $columnNames['position'] = ['name'];
 
-        return view('Pages.user-one', [
+        return view('Pages.User.user-one', [
             'title' => 'user-with-city-and-position',
             'topic' => 'Інформація про користувача (з містом та позицією):',
             'columnNames' => $columnNames,
@@ -91,7 +91,7 @@ class UserController extends Controller
         $columnNames['city'] = ['name'];
         $columnNames['position'] = ['name'];
 
-        return view('Pages.user', [
+        return view('Pages.User.user', [
             'title' => 'users-with-city-and-position',
             'topic' => 'Список користувачів (з містом та позицією):',
             'columnNames' => $columnNames,
@@ -114,11 +114,11 @@ class UserController extends Controller
                 $users = User::whereBetween('age', [20, 30])->paginate(10);
                 break;
             case 16://Users with age between 20 and 30
-                $users = DB::table('users')->where('age', 30)->take(3)->get();
+                $users = User::where('age', 30)->take(3)->get();
                 break;
         };
 
-        return view('Pages.user', [
+        return view('Pages.User.user', [
             'title' => 'users-with-city-and-position',
             'topic' => 'Список користувачів за запитом (з містом та позицією):',
             'columnNames' => $columnNames,
@@ -193,7 +193,7 @@ class UserController extends Controller
                 break;
             default: return redirect()->route('homework.list');
         };
-        return view('Pages.user', [
+        return view('Pages.User.user', [
             'title' => 'users-by-query',
             'topic' => 'Список користувачів за запитом:',
             'columnNames' => $columnNames,
@@ -268,7 +268,7 @@ class UserController extends Controller
                 break;
             default: return redirect()->route('homework.list');
         };
-        return view('Pages.user', [
+        return view('Pages.User.user', [
             'title' => 'users-by-query',
             'topic' => 'Список користувачів за запитом:',
             'columnNames' => $columnNames,
@@ -282,7 +282,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('Pages.user-form', [
+        return view('Pages.User.user-form', [
             'title' => 'create-user',
             'topic' => 'Форма для створення нового користувача:',
             'user' => '',
@@ -313,7 +313,7 @@ class UserController extends Controller
     public function edit()
     {
         $user = User::inRandomOrder()->first();
-        return view('Pages.user-form', [
+        return view('Pages.User.user-form', [
             'title' => 'update-user',
             'topic' => 'Форма для зміни користувача:',
             'user' => $user,

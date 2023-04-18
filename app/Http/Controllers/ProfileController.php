@@ -17,7 +17,7 @@ class ProfileController extends Controller
         $columnNames['user'] = ['login', 'password'];
         $profiles = Profile::paginate(10);
 
-        return view('Pages.user', [
+        return view('Pages.User.user', [
             'title' => 'profiles-with-users',
             'topic' => 'Інформація  з профайлів користувачів (доповнена таблицею users):',
             'columnNames' => $columnNames,
