@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CountryController;
+use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Artisan;
 
@@ -26,7 +27,7 @@ Route::get('/', function () {
     return view('Pages.main', ['title' => 'StadyLaravel-main']);
 })->name('main');
 
-// grouped roures 'homework'
+// grouped routes 'homework'
 Route::name('homework')->prefix('homework')->group(function () {
     Route::get('', function () {
         return view('Pages.homework.list', ['title' => 'Homework']);
@@ -58,7 +59,7 @@ Route::get('/dir/test', function () {
     return 'Тестова сторінка в dir';
 })->name('dirTest');
 
-//grouped routes 'name'
+//grouped routes 'user'
 Route::prefix('user')->name('user.')->group(function () {
     Route::get('/all', [UserController::class, 'showAll'])
     ->name('all');
@@ -158,3 +159,8 @@ if (app()->environment() == 'local') {
         return "Кэш очищен.";
     });
 };
+
+//routes for Admin Dashboard
+Route::prefix('dashboard')->name('dashboard.')->group(function() {
+    Route::get('', [AdminController::class, 'main'])->name('main');
+});

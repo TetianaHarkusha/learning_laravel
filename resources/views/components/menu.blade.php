@@ -3,4 +3,5 @@
     <li {{$li->attributes}}><a href={{route('homework.list')}} {{$a->attributes}}">Homework</a></li>
     <li {{$li->attributes}}><a href={{route('user.all')}} {{$a->attributes}}">Users</a></li>
     <li {{$li->attributes}}><a href="#" {{$a->attributes}}>Blog</a></li>
+    <li {{$li->attributes}}><a href={{route('dashboard.main')}} {{$a->attributes}}">AdminDashboard</a></li>
 </ul>
