@@ -8,6 +8,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Artisan;
 
@@ -50,10 +51,7 @@ Route::prefix('post')->name('post.')->group(function () {
 });
 
 // routes for p.3
-Route::get('/test', function () {
-    return 'Тестова сторінка';
-})->name('test');
-//Route::get('/test', [CityController::class, 'test']);
+Route::match(['get', 'post'], '/test', [TestController::class, 'testForm'])->name('test.form');
 
 Route::get('/dir/test', function () {
     return 'Тестова сторінка в dir';
