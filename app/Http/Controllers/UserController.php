@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Http\Requests\StoreUserRequest;
 
 class UserController extends Controller
 {
@@ -278,7 +279,8 @@ class UserController extends Controller
     }
     /**
      * Show the form for creating a new user.
-     *
+     * 
+     * @return Illuminate\Http\Response;
      */
     public function create()
     {
@@ -293,9 +295,10 @@ class UserController extends Controller
     /**
      * Store a newly created user in storage.
      *
-     * @param  \Illuminate\Http\Request  $req
+     * @param app\Http\Requests\StoreUserRequest $req
+     * @return Illuminate\Http\Response;
      */
-    public function store(Request $req)
+    public function store(StoreUserRequest $req)
     {
         $user = User::create([
             'name' => $req->input('name'),
@@ -308,7 +311,8 @@ class UserController extends Controller
 
     /**
      * Show the form for editing one random user
-     *
+     * 
+     * @return Illuminate\Http\Response;
      */
     public function edit()
     {
@@ -324,9 +328,10 @@ class UserController extends Controller
     /**
      * Update the specified user in storage.
      *
-     * @param  \App\Http\Requests $req
+     * @param app\Http\Requests\StoreUserRequest $req
+     * @return Illuminate\Http\Response;
      */
-    public function update(Request $req)
+    public function update(StoreUserRequest $req)
     {
         $user = User::find($req->input('id'))->update([
             'name' => $req->input('name'),
