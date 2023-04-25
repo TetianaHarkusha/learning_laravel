@@ -43,22 +43,22 @@
     </a>
     <ul class="nav nav-treeview">
         <li class="nav-item">
-        <a href="#" class="nav-link">
+        <a href="{{route('dashboard.posts.index')}}" class="nav-link">
             <p>Переглянути всі</p>
         </a>
         </li>
         <li class="nav-item">
-        <a href="#" class="nav-link">
-            <p>Вибрати дату публікації</p>
-        </a>
-        </li>
-        </li>
-        <li class="nav-item">
-        <a href="#" class="nav-link">
+        <a href="{{route('dashboard.posts.create')}}" class="nav-link">
             <p>Створити нову</p>
         </a>
         </li>
     </ul>
+    </li>
+    <li class="nav-item">
+    <a href="{{route('main')}}" class="nav-link">
+        <i class="nav-icon fas fa-home"></i>
+        <p>Головна сторінка сайту</p>
+    </a>
     </li>
 </ul>
 </nav>

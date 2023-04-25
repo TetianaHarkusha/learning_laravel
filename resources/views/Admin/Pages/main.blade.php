@@ -1,6 +1,6 @@
 @extends('Admin.layouts.admin')
 
-@section('title', 'головна')
+@section('title', $title)
     
 @section('content')
     @parent
@@ -33,7 +33,9 @@
                 <div class="icon">
                     <i class="ion ion-stats-bars"></i>
                 </div>
-                <a href="#" class="small-box-footer">Більше інформації <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ route('dashboard.posts.index')}}" class="small-box-footer">Більше інформації 
+                    <i class="fas fa-arrow-circle-right"></i>
+                </a>
                 </div>
             </div>
             <!-- ./col -->

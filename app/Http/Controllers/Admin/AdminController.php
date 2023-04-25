@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Models\Post;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -16,9 +15,10 @@ class AdminController extends Controller
     public function main()  
     {
         return view('Admin.Pages.main', [
+            'title' => 'головна',
             'pageName' => 'Головна сторінка',
-            'postCount' => Post::all()->count(),
-            'userCount' => User::all()->count(),
+            'postCount' => DB::table('posts')->count(),
+            'userCount' => DB::table('users')->count(),
         ]);
     }
 }

@@ -10,7 +10,7 @@ class TestController extends Controller
     /**
      * Test function with form for POST or GET request 
      * 
-     * @param app\Http\Requests\StoreTestRequest $request
+     * @param App\Http\Requests\StoreTestRequest $request
      * @return Illuminate\Http\Response;
      */
     public function testForm(StoreTestRequest $request) 

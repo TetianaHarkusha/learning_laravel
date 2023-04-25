@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserDoubleController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PostController;
+use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\Admin\AdminController;
@@ -162,4 +162,5 @@ if (app()->environment() == 'local') {
 //routes for Admin Dashboard
 Route::prefix('dashboard')->name('dashboard.')->group(function() {
     Route::get('', [AdminController::class, 'main'])->name('main');
+    Route::resource('posts', PostController::class);
 });

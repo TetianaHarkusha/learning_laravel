@@ -10,7 +10,7 @@ $(document).ready(function () {
     });
 
     $('.delete-btn').click(function () {
-        var res = confirm('Подтвердите действия');
+        var res = confirm('Підтвердіть дію');
         if(!res){
             return false;
         }
