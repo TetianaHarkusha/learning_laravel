@@ -54,6 +54,8 @@ Route::prefix('post')->name('post.')->group(function () {
 Route::match(['get', 'post'], '/test', [TestController::class, 'testForm'])
     ->middleware('setLocale:uk')->name('test.form');
 
+Route::get('/test/response/{id}', [TestController::class, 'myResponse'])->name('test.response');
+
 Route::get('/dir/test', function () {
     return 'Тестова сторінка в dir';
 })->name('dirTest');

@@ -28,4 +28,20 @@ class TestController extends Controller
             'title' => 'test', 
         ]);
     }
+
+    /**
+     * Test function to get response
+     * 
+     * @return Illuminate\Http\Response;
+     * @return integer $id
+     */
+    public function myResponse (StoreTestRequest $request, $id) {
+        switch ($id) {
+            case 1: //first response
+                return response ('Привіт, гість! Давай знайомитися.', 201);
+            case 2: //second response
+                return response ('Вибачте, Ви здається заблукали', 404);
+            default: return redirect()->route('homework.list');
+        };
+    }
 }
