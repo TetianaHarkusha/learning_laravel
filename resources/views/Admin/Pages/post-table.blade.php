@@ -47,13 +47,13 @@
                             <i class="nav-icon fas fa-thumbs-up"></i> {{$post->likes}}
                         </td>
                         <td class="project-actions text-right">
-                            <a class="btn btn-primary btn-sm" href="{{ route('dashboard.posts.show', ['post' => $post->id]) }}">
+                            <a class="btn btn-primary btn-sm" href="{{ route('dashboard.posts.show', ['post' => $post]) }}">
                                 <i class="fas fa-folder"></i> Див.
                             </a>
-                            <a class="btn btn-info btn-sm" href="{{ route('dashboard.posts.edit', ['post' => $post->id]) }}">
+                            <a class="btn btn-info btn-sm" href="{{ route('dashboard.posts.edit', ['post' => $post]) }}">
                                 <i class="fas fa-pencil-alt"></i> Редаг.
                             </a>
-                            <form  action="{{ route('dashboard.posts.destroy', ['post' => $post->id]) }}" method="POST" style="display: inline-block">
+                            <form  action="{{ route('dashboard.posts.destroy', ['post' => $post]) }}" method="POST" style="display: inline-block">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm delete-btn">
