@@ -2,8 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserDoubleController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\CountryController;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Artisan;
 
@@ -23,6 +26,7 @@ Route::get('/', function () {
     return view('Pages.main', ['title' => 'StadyLaravel-main']);
 })->name('main');
 
+// grouped roures 'homework'
 Route::name('homework')->prefix('homework')->group(function () {
     Route::get('', function () {
         return view('Pages.homework.list', ['title' => 'Homework']);
@@ -32,13 +36,13 @@ Route::name('homework')->prefix('homework')->group(function () {
     })->name('.lesson');
 });
 
-//grouped routes 'posts' and used controller
+//grouped routes 'posts'
 Route::name('allPosts')->prefix('posts')->group(function () {
     Route::get('', [PostController::class, 'showAll']);
     Route::get('/{date}', [PostController::class, 'showAll'])->name('.date');
 });
 
-// grouped routes 'post' and used controller
+// grouped routes 'post'
 Route::prefix('post')->name('post.')->group(function () {
     Route::get('/{id}', [PostController::class,'show'])->name('postId');
     Route::get('/{catId}/{postId}', [PostController::class, 'show'])->name('catAndPostId');
@@ -48,12 +52,13 @@ Route::prefix('post')->name('post.')->group(function () {
 Route::get('/test', function () {
     return 'Тестова сторінка';
 })->name('test');
+//Route::get('/test', [CityController::class, 'test']);
 
 Route::get('/dir/test', function () {
     return 'Тестова сторінка в dir';
 })->name('dirTest');
 
-//grouped routes 'name' and used controller
+//grouped routes 'name'
 Route::prefix('user')->name('user.')->group(function () {
     Route::get('/all', [UserController::class, 'showAll'])
     ->name('all');
@@ -75,12 +80,33 @@ Route::prefix('user')->name('user.')->group(function () {
 
     Route::get('/restore', [UserController::class, 'restore'])
     ->name('restore');
-    
+
     Route::get('/query/{id?}', [UserController::class, 'showByQuery'])
     ->name('query');
 
     Route::get('/Eloquent/{id?}', [UserController::class, 'showByEloquent'])
     ->name('query.Eloquent');
+
+    //grouped routes 'user.profile' user with relationship profile
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/one', [UserDoubleController::class, 'showOneWithProfile'])
+        ->name('one');
+
+        Route::get('/all', [UserDoubleController::class, 'showAllWithProfiles'])
+        ->name('all');
+    });
+
+    //grouped routes 'user.city.position' - user with relationships city and position
+    Route::prefix('city')->name('city.')->group(function () {
+        Route::prefix('position')->name('position.')->group(function () {
+            Route::get('one', [UserController::class, 'showOneWithCityAndPosition'])
+            ->name('one');
+            Route::get('all', [UserController::class, 'showAllWithCityAndPosition'])
+            ->name('all');
+            Route::get('query/{id}', [UserController::class, 'showWithCityAndPositionQuery'])
+            ->name('query');
+        });
+    });
 
     Route::get('/{name}', [UserController::class,'show'])
     ->whereAlpha('name')->name('name');
@@ -95,8 +121,21 @@ Route::prefix('user')->name('user.')->group(function () {
     ->whereNumber('id')->where('name', '[a-z]{2,}')->name('idName');
 });
 
-// used controller for city
-Route::get('/city/{city?}', [CityController::class, 'show'])->name('city');
+//route for profiles
+Route::get('/profile/user/all', [ProfileController::class, 'showAllWithUsers'])
+->name('profile.user.all');
+
+//route for country
+Route::prefix('country')->name('country.')->group(function () {
+    Route::get('/withUser', [CountryController::class, 'showWithUsers'])->name('city.withUser');
+    Route::get('/city/{id}', [CountryController::class, 'showAllWithCities'])->name('city');
+});
+
+// grouped controller city
+Route::prefix('city')->name('city.')->group(function () {
+    Route::get('/country', [CityController::class, 'showAllWithCountry'])->name('country');
+    Route::get('/{city?}', [CityController::class, 'show'])->name('name');
+});
 
 //route for p.12
 Route::get('/{year}/{month}/{day}', function ($year, $month, $day) {
@@ -118,4 +157,4 @@ if (app()->environment() == 'local') {
         Artisan::call('route:clear');
         return "Кэш очищен.";
     });
-}
+};

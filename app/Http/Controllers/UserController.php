@@ -16,7 +16,7 @@ class UserController extends Controller
      */
     public function show($id, $name = '')
     {
-        $columnNames = DB::getSchemaBuilder()->getColumnListing('users');
+        $columnNames[0] = DB::getSchemaBuilder()->getColumnListing('users');
         $query = DB::table('users');
 
         $title = 'user-' . $id;
@@ -36,7 +36,7 @@ class UserController extends Controller
 
         $users = $query->paginate(10);
 
-        return view('Pages.user', [
+        return view('Pages.User.user', [
             'title' => $title,
             'topic' => 'Інформація про користувача(-ів):',
             'columnNames' => $columnNames,
@@ -50,16 +50,80 @@ class UserController extends Controller
     public function showAll()
     {
         //names of all table columns
-        $columnNames = DB::getSchemaBuilder()->getColumnListing('users');
+        $columnNames[0] = DB::getSchemaBuilder()->getColumnListing('users');
 
         //all table rows with pagination
         $users = DB::table('users')->paginate(10);
 
-        return view('Pages.user', [
+        return view('Pages.User.user', [
             'title' => 'users-all',
             'topic' => 'Список користувачів:',
             'columnNames' => $columnNames,
             'users' => $users,
+        ]);
+    }
+
+    /**
+     * Show one user with relationships for lesson10 p.15
+     */
+    public function showOneWithCityAndPosition()
+    {
+        $user = User::inRandomOrder()->first();
+        $columnNames [0]= array_keys($user->getAttributes());
+        $columnNames['city'] = ['name'];
+        $columnNames['position'] = ['name'];
+
+        return view('Pages.User.user-one', [
+            'title' => 'user-with-city-and-position',
+            'topic' => 'Інформація про користувача (з містом та позицією):',
+            'columnNames' => $columnNames,
+            'user' => $user,
+        ]);
+    }
+
+    /**
+     * Show all user with relationships for lesson10 p.15
+     */
+    public function showAllWithCityAndPosition()
+    {
+        $users = User::paginate(10);
+        $columnNames [0]= array_keys(User::first()->getAttributes());
+        $columnNames['city'] = ['name'];
+        $columnNames['position'] = ['name'];
+
+        return view('Pages.User.user', [
+            'title' => 'users-with-city-and-position',
+            'topic' => 'Список користувачів (з містом та позицією):',
+            'columnNames' => $columnNames,
+            'users' => $users,
+        ]);
+    }
+
+    /**
+     * Show all user with relationships by query for lesson10 p.15
+     */
+    public function showWithCityAndPositionQuery($id)
+    {
+        $users = User::paginate(10);
+        $columnNames [0]= array_keys(User::first()->getAttributes());
+        $columnNames['city'] = ['name'];
+        $columnNames['position'] = ['name'];
+
+        switch ($id) {
+            case 1://Users with age between 20 and 30
+                $users = User::whereBetween('age', [20, 30])->paginate(10);
+                break;
+            case 16://Users with age between 20 and 30
+                $users = User::where('age', 30)->take(3)->get();
+                break;
+        };
+
+        return view('Pages.User.user', [
+            'title' => 'users-with-city-and-position',
+            'topic' => 'Список користувачів за запитом (з містом та позицією):',
+            'columnNames' => $columnNames,
+            'users' => $users,
+            'id' =>$id,
         ]);
     }
 
@@ -69,17 +133,17 @@ class UserController extends Controller
     public function showByQuery($id)
     {
         //all column names of table 'user' in array
-        $columnNames = DB::getSchemaBuilder()->getColumnListing('users');
+        $columnNames[0] = DB::getSchemaBuilder()->getColumnListing('users');
         switch ($id) {
             case 1://p.2 All records from table 'user'
                 $users = DB::table('users')->paginate(10);
                 break;
             case 2://p.4 Only columns 'name' and 'email'
-                $columnNames = ['name', 'email'];
+                $columnNames[0] = ['name', 'email'];
                 $users = DB::table('users')->select('name', 'email')->paginate(10);
                 break;
             case 3://p.5 Rename column 'email' to 'user_email'
-                $columnNames = ['name', 'user_email'];
+                $columnNames[0] = ['name', 'user_email'];
                 $users = DB::table('users')->select('name', 'email as user_email')->paginate(10);
                 break;
             case 4://p.6 Users with age = 30
@@ -110,7 +174,7 @@ class UserController extends Controller
                 $users = DB::table('users')->whereNotBetween('age', [30, 40])->orderByDesc('salary')->paginate(10);
                 break;
             case 13://p.11 Collection of names.
-                $columnNames = ['name'];
+                $columnNames[0] = ['name'];
                 $users = DB::table('users')
                     ->select(DB::raw("left(ltrim(name), locate(' ', ltrim(name))-1)"))
                     ->distinct()->paginate(10);
@@ -129,7 +193,7 @@ class UserController extends Controller
                 break;
             default: return redirect()->route('homework.list');
         };
-        return view('Pages.user', [
+        return view('Pages.User.user', [
             'title' => 'users-by-query',
             'topic' => 'Список користувачів за запитом:',
             'columnNames' => $columnNames,
@@ -145,17 +209,17 @@ class UserController extends Controller
     {
         //all column names of table 'user' in array
         $user = User::firstOrFail()->getAttributes();
-        $columnNames = array_keys($user);
+        $columnNames[0] = array_keys($user);
         switch ($id) {
             case 1://p.2 All records from table 'user'
                 $users = User::paginate(10);
                 break;
             case 2://p.4 Only columns 'name' and 'email'
-                $columnNames = ['name', 'email'];
+                $columnNames[0] = ['name', 'email'];
                 $users = User::select('name', 'email')->paginate(10);
                 break;
             case 3://p.5 Rename column 'email' to 'user_email'
-                $columnNames = ['name', 'user_email'];
+                $columnNames[0] = ['name', 'user_email'];
                 $users = User::select('name', 'email as user_email')->paginate(10);
                 break;
             case 4://p.6 Users with age = 30
@@ -186,7 +250,7 @@ class UserController extends Controller
                 $users = User::whereNotBetween('age', [30, 40])->orderByDesc('salary')->paginate(10);
                 break;
             case 13://p.11 Collection of names.
-                $columnNames = ['name'];
+                $columnNames[0] = ['name'];
                 $users = User::select(User::raw("left(ltrim(name), locate(' ', ltrim(name))-1) as name"))
                     ->distinct()->paginate(10);
                 break;
@@ -204,7 +268,7 @@ class UserController extends Controller
                 break;
             default: return redirect()->route('homework.list');
         };
-        return view('Pages.user', [
+        return view('Pages.User.user', [
             'title' => 'users-by-query',
             'topic' => 'Список користувачів за запитом:',
             'columnNames' => $columnNames,
@@ -218,7 +282,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('Pages.user-form', [
+        return view('Pages.User.user-form', [
             'title' => 'create-user',
             'topic' => 'Форма для створення нового користувача:',
             'user' => '',
@@ -249,7 +313,7 @@ class UserController extends Controller
     public function edit()
     {
         $user = User::inRandomOrder()->first();
-        return view('Pages.user-form', [
+        return view('Pages.User.user-form', [
             'title' => 'update-user',
             'topic' => 'Форма для зміни користувача:',
             'user' => $user,
@@ -284,12 +348,12 @@ class UserController extends Controller
                 $deleted = User::where('age', '>', 30)->forceDelete();
                 break;
             case 2://p.9 Remove users with id 4,5,6.
-                $deleted = User::whereIn('id',[4, 5, 6])->forceDelete();
+                $deleted = User::whereIn('id', [4, 5, 6])->forceDelete();
                 break;
             case 3://p.10 Soft deletion for users
                 $deleted = User::where('age', '>', 20)->delete();
                 break;
-        default: return redirect()->route('homework.list');
+            default: return redirect()->route('homework.list');
         };
         return redirect()->route('homework.list');
     }

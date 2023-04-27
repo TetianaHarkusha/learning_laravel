@@ -4,10 +4,10 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\City;
-use App\Models\Country;
+use App\Models\Profile;
+use App\Models\UserDouble;
 
-class CitySeeder extends Seeder
+class ProfileSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,8 +16,8 @@ class CitySeeder extends Seeder
      */
     public function run()
     {
-        foreach(Country::inRandomOrder()->get() as $country) {
-            City::factory()->count(rand(1,5))->for($country)->create();
+        foreach(UserDouble::inRandomOrder()->get() as $user) {
+            Profile::factory()->count(1)->for($user, 'user')->create();
         };
     }
 }

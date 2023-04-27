@@ -2,8 +2,14 @@
 <table {{$attributes}}>
     <thead>
         <tr>
-        @foreach($columnNames as $columnName)
-            <th scope="col">{{$columnName}}</th>
+        @foreach($columnNames as $key => $value)
+            @foreach($value as $columnName)
+                @if($key === 0) 
+                    <th scope="col">{{$columnName}}</th>
+                @else
+                    <th scope="col">{{$key . '.' . $columnName}}</th>
+                @endif
+            @endforeach
         @endforeach
         </tr>
     </thead>
@@ -12,12 +18,18 @@
         <tr>
             {{--if using Eloquent --}}
             @if($record instanceof Illuminate\Database\Eloquent\Model)
-                @foreach($columnNames as $columnName)
-                    @if ($columnName === 'id')
-                        <th>{{$record->$columnName}}</th>
-                    @else
-                        <td>{{$record->$columnName}}</td>
-                    @endif
+                @foreach($columnNames as $key => $value)
+                    @foreach($value as $columnName)  
+                        @if($key === 0)
+                            @if ($columnName === 'id')  
+                                <th>{{$record->$columnName}}</th>
+                            @else
+                                <td>{{$record->$columnName}}</td>
+                            @endif
+                        @else
+                            <td>{{$record->$key->$columnName}}</td>
+                        @endif
+                    @endforeach
                 @endforeach
             @else {{--if using facade DB--}}
                 @foreach($record as $field)
