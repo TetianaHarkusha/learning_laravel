@@ -10,6 +10,7 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\HomeworkController;
+use App\Http\Controllers\SessionController;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Artisan;
 
@@ -30,9 +31,16 @@ Route::get('/', function () {
 })->name('main');
 
 // grouped routes 'homework'
-Route::name('homework')->prefix('homework')->group(function () {
-    Route::get('', [HomeworkController::class, 'showAll'])->name('.list');
-    Route::get('/{id}', [HomeworkController::class, 'showOne'])->name('.lesson');
+Route::name('homework.')->prefix('homework')->group(function () {
+    Route::get('', [HomeworkController::class, 'showAll'])->name('list');
+    Route::get('/{id}', [HomeworkController::class, 'showOne'])->name('lesson');
+});
+
+// grouped routes 'session'
+Route::name('session.')->prefix('session')->group(function () {
+    Route::get('/forget', [SessionController::class, 'destroy'])->name('destroy');
+    Route::get('/flush', [SessionController::class, 'destroyAll'])->name('destroyAll');
+    Route::get('/array', [SessionController::class, 'setGetArray'])->name('array');
 });
 
 //grouped routes 'posts'
