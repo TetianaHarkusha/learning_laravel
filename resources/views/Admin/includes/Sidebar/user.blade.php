@@ -7,8 +7,10 @@
             <a href="{{route('dashboard.main')}}" class="d-block">{{$name}}</a>
         </div>
     </div>
+    <!--Section for information from the session -->
     <div class="info d-flex flex-column">
         <div class="count">Відвідини сторінки - {{session('count')}} раз</div>
         <div class="time">Час першого входу - {{session('time')}}</div>
-    </div>   
+    </div>  
+    <!--/section -->
 </div> 
