@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="/Admin/plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="/Admin/dist/css/adminlte.min.css">
+  <!-- Custom style -->
+  <link rel="stylesheet" href="/Admin/css/admin.css">
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -49,6 +51,6 @@
 <script src="/Admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/Admin/dist/js/adminlte.min.js"></script>
-<script src="/js/admin.js"></script>
+<script src="/Admin/js/admin.js"></script>
 </body>
 </html>

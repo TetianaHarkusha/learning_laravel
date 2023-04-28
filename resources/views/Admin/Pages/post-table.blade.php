@@ -53,7 +53,7 @@
                             <a class="btn btn-info btn-sm" href="{{ route('dashboard.posts.edit', ['post' => $post]) }}">
                                 <i class="fas fa-pencil-alt"></i> Редаг.
                             </a>
-                            <form  action="{{ route('dashboard.posts.destroy', ['post' => $post]) }}" method="POST" style="display: inline-block">
+                            <form class="form-btn" action="{{ route('dashboard.posts.destroy', ['post' => $post]) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm delete-btn">
