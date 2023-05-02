@@ -61,6 +61,8 @@ Route::prefix('test')->name('test.')->group(function () {
     ->middleware('setLocale:uk')->name('form');
     
     Route::get('/response/{id}', [TestController::class, 'myResponse'])->name('response');
+
+    Route::get('/outside', [TestController::class, 'getOutside'])->name('outside');
 });
 
 Route::get('/dir/test', function () {
