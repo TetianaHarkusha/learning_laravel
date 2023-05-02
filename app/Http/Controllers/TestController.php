@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTestRequest;
+use Illuminate\Support\Facades\Http;
 
 class TestController extends Controller
 {
@@ -32,7 +33,7 @@ class TestController extends Controller
     /**
      * Test function to get response
      * 
-     * @return Illuminate\Http\Response;
+     * @param App\Http\Requests\StoreTestRequest $request
      * @return integer $id
      */
     public function myResponse (StoreTestRequest $request, $id) {
@@ -43,5 +44,19 @@ class TestController extends Controller
                 return response ('Вибачте, Ви здається заблукали', 404);
             default: return redirect()->route('homework.list');
         };
+    }
+
+    /**
+     * Test function to get information from another site
+     * 
+     */
+    public function getOutside () {
+        $response = Http::get('https://jsonplaceholder.typicode.com/posts');
+        $columnNames[0] = ['UserId', 'id', 'title', 'body'];
+        return view('Pages.posts-outside', [
+            'posts' => $response->object(),
+            'title' => 'test', 
+            'columnNames' => $columnNames,
+        ]);
     }
 }
