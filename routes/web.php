@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\HomeworkController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\Auth\UserLoginController;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Artisan;
 
@@ -173,7 +174,16 @@ if (app()->environment() == 'local') {
 };
 
 //routes for Admin Dashboard
-Route::prefix('dashboard')->name('dashboard.')->group(function() {
+Route::prefix('dashboard')->name('dashboard.')->middleware('auth')->group(function() {
     Route::get('', [AdminController::class, 'main'])->name('main');
     Route::resource('posts', PostController::class);
 });
+
+//routes for Authentication
+Route::get('/login', [UserLoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [UserLoginController::class, 'storeLogin']);
+
+Route::get('/logout', [UserLoginController::class, 'logout'])->name('logout');
+
+Route::get('/register', [UserLoginController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [UserLoginController::class, 'storeRegister']);
