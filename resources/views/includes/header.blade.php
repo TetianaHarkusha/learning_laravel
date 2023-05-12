@@ -10,8 +10,15 @@
         <x-slot:a class="nav-link px-2">link-secondary</x-slot:a>
     </x-menu>
 
-    <div class="col-md-3 text-end">
-        <button type="button" class="btn btn-outline-primary me-2">Login</button>
-        <button type="button" class="btn btn-primary">Sign-up</button>
-    </div>
+    @if (Auth::check())
+        <div class="col-md-3 text-end">
+            <span class="user">{{Auth::user()->login}}</span>
+            <a href="{{ route('logout') }}" class="btn btn-primary" role="button">Logout</a>
+        </div>
+    @else
+        <div class="col-md-3 text-end">
+            <a href="{{ route('login') }}" class="btn btn-outline-primary me-2" role="button">Login</a>
+            <a href="{{ route('register') }}" class="btn btn-primary" role="button">Register</a>
+        </div>
+    @endif
 </header>

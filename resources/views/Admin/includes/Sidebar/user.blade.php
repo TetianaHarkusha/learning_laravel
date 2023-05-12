@@ -4,7 +4,7 @@
             <img src="/Admin/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-            <a href="{{route('dashboard.main')}}" class="d-block">{{$name}}</a>
+            <a href="{{route('dashboard.main')}}" class="d-block">{{Auth::user()->user->name}}<br>login: {{Auth::user()->login}}</a>
         </div>
     </div>
     <!--Section for information from the session -->
