@@ -47,12 +47,12 @@ class PostController extends Controller
      */
     public function store(StoreUpdatePostRequest $request)
     {
-        $user = new Post;
-        $user->title = $request->input('title');
-        $user->slug = Str::of($request->input('title'))->slug('-');
-        $user->text = $request->input('text');
-        $user->likes = $request->input('likes');
-        $user->save();
+        $post = new Post;
+        $post->title = $request->input('title');
+        $post->slug = Str::of($request->input('title'))->slug('-');
+        $post->text = $request->input('text');
+        $post->likes = $request->input('likes');
+        $post->save();
         
         return back()->withSuccess('Публікація була успішно додана.');
     }
@@ -98,12 +98,12 @@ class PostController extends Controller
      */
     public function update(StoreUpdatePostRequest $request, $id)
     {
-        $user = Post::find($id);
-        $user->title = $request->input('title');
-        $user->slug = Str::of($request->input('title'))->slug('-');
-        $user->text = $request->input('text');
-        $user->likes = $request->input('likes');
-        $user->save();
+        $post = Post::find($id);
+        $post->title = $request->input('title');
+        $post->slug = Str::of($request->input('title'))->slug('-');
+        $post->text = $request->input('text');
+        $post->likes = $request->input('likes');
+        $post->save();
         
         return back()->withSuccess('Публікація була успішно змінена.');
     }
