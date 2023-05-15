@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\UserLogin;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
 
 class UserLoginController extends Controller
 {
@@ -19,7 +20,7 @@ class UserLoginController extends Controller
      */
     public function showLoginForm()
     {
-        return view('auth.login');
+        return view('auth.login', ['title' => 'login']);
     }
 
     /**
@@ -29,7 +30,7 @@ class UserLoginController extends Controller
      */
     public function showRegisterForm()
     {
-        return view('auth.register');
+        return view('auth.register', ['title' => 'register']);
     }
 
     /**
@@ -50,14 +51,15 @@ class UserLoginController extends Controller
         ]);
 
         Auth::login($userLogin);
+        event(new Registered($userLogin));
 
-        return redirect()->route('main')->withSuccess(__('The user has been successfully registered.'));
+        return back()->withSuccess(__('The user has been successfully registered.'));
     }
 
     /**
      * Handle an incoming authentication request.
      */
-    public function storeLogin(Request $request)//: RedirectResponse
+    public function storeLogin(Request $request)
     {
         if(Auth::attempt([
             'login' => $request->input('login'),
@@ -65,7 +67,7 @@ class UserLoginController extends Controller
             $request->input('remember')
         )) {
             $request->session()->regenerate();
-            return redirect()->intended(route('dashboard.main'));
+            return redirect()->intended();
         };
 
         if(UserLogin::where('login', $request->input('login'))->count()) {
@@ -73,7 +75,7 @@ class UserLoginController extends Controller
         } else {
             $errors['login'] = 'The login is wrong';
         };
-
+        
         return back()->withErrors($errors)->onlyInput('login');
     }
 

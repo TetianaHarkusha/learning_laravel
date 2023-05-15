@@ -12,6 +12,7 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\HomeworkController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\Auth\UserLoginController;
+use App\Http\Controllers\Auth\EmailVerificationController;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Artisan;
 
@@ -174,7 +175,7 @@ if (app()->environment() == 'local') {
 };
 
 //routes for Admin Dashboard
-Route::prefix('dashboard')->name('dashboard.')->middleware('auth')->group(function() {
+Route::prefix('dashboard')->name('dashboard.')->middleware('auth')->middleware('verified')->group(function() {
     Route::get('', [AdminController::class, 'main'])->name('main');
     Route::resource('posts', PostController::class);
 });
@@ -183,7 +184,16 @@ Route::prefix('dashboard')->name('dashboard.')->middleware('auth')->group(functi
 Route::get('/login', [UserLoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [UserLoginController::class, 'storeLogin']);
 
-Route::get('/logout', [UserLoginController::class, 'logout'])->name('logout');
+Route::post('/logout', [UserLoginController::class, 'logout'])->name('logout');
 
 Route::get('/register', [UserLoginController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [UserLoginController::class, 'storeRegister']);
+
+//routes for Email Verification
+Route::prefix('email')->name('verification.')->group( function(){
+    Route::prefix('verify')->group(function(){
+        Route::get('', [EmailVerificationController::class, 'showNotice'])->middleware('auth')->name('notice');
+        Route::get('/{id}/{hash}',[EmailVerificationController::class, 'verify'])->middleware(['auth', 'signed'])->name('verify');
+    });
+    Route::post('/verification-notification',[EmailVerificationController::class, 'resend'])->middleware(['auth', 'throttle:6,1'])->name('resend');
+});

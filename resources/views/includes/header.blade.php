@@ -13,12 +13,19 @@
     @if (Auth::check())
         <div class="col-md-3 text-end">
             <span class="user">{{Auth::user()->login}}</span>
-            <a href="{{ route('logout') }}" class="btn btn-primary" role="button">Logout</a>
+            <a href="{{ route('logout') }}" class="btn btn-primary" 
+                onclick="event.preventDefault();
+                document.getElementById('logout-form').submit();">
+            {{ __('Logout') }}
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+            </form>
         </div>
     @else
         <div class="col-md-3 text-end">
-            <a href="{{ route('login') }}" class="btn btn-outline-primary me-2" role="button">Login</a>
-            <a href="{{ route('register') }}" class="btn btn-primary" role="button">Register</a>
+            <a href="{{ route('login') }}" class="btn btn-outline-primary me-2" role="button">{{ __('Login') }}</a>
+            <a href="{{ route('register') }}" class="btn btn-primary" role="button">{{ __('Register') }}</a>
         </div>
     @endif
 </header>
