@@ -13,6 +13,7 @@ use App\Http\Controllers\HomeworkController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\Auth\UserLoginController;
 use App\Http\Controllers\Auth\EmailVerificationController;
+use App\Http\Controllers\Auth\PasswordResettingController;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Artisan;
 
@@ -196,4 +197,12 @@ Route::prefix('email')->name('verification.')->group( function(){
         Route::get('/{id}/{hash}',[EmailVerificationController::class, 'verify'])->middleware(['auth', 'signed'])->name('verify');
     });
     Route::post('/verification-notification',[EmailVerificationController::class, 'resend'])->middleware(['auth', 'throttle:6,1'])->name('resend');
+});
+
+//routes for Resetting Passwords
+Route::name('password.')->middleware('guest')->group( function(){
+    Route::get('/forgot-password', [PasswordResettingController::class, 'showFormForgot'])->name('request');
+    Route::post('/forgot-password', [PasswordResettingController::class, 'sendLink'])->name('email');
+    Route::get('/reset-password/{token}', [PasswordResettingController::class, 'showFormReset'])->name('reset');
+    Route::post('/reset-password', [PasswordResettingController::class, 'update'])->name('update');
 });
