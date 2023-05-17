@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class Role extends Model
 {
     use HasFactory;
 
     /**
-     * Get the user who wrote the post
+     * Get the logins associated with the role.
      */
-    public function user()
+    public function logins()
     {
-        return $this->belongsTo(User::class)->withDefault();
+        return $this->hasMany(UserLogin::class);
     }
 }

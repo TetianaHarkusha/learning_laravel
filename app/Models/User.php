@@ -28,7 +28,7 @@ class User extends Authenticatable
     }
 
      /**
-     * Get the city in which the user is worked.
+     * Get the position in which the user is worked.
      */
     public function position()
     {
@@ -41,5 +41,13 @@ class User extends Authenticatable
     public function login()
     {
         return $this->hasOne(UserLogin::class);
+    }
+
+    /**
+     * Get this user's posts.
+     */
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
     }
 }

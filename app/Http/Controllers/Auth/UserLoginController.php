@@ -10,6 +10,7 @@ use App\Models\UserLogin;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\DB;
 
 class UserLoginController extends Controller
 {
@@ -47,6 +48,7 @@ class UserLoginController extends Controller
         
         $userLogin = $user->login()->create([
             'login' => $request->input('login'),
+            'role_id' => DB::table('roles')->where('name', 'user')->value('id'),
             'password' => Hash::make($request->input('password')),
         ]);
 
