@@ -176,7 +176,7 @@ if (app()->environment() == 'local') {
 };
 
 //routes for Admin Dashboard
-Route::prefix('dashboard')->name('dashboard.')->middleware('auth')->middleware('verified')->group(function() {
+Route::prefix('dashboard')->name('dashboard.')->middleware(['verified', 'auth'])->group(function() {
     Route::get('', [AdminController::class, 'main'])->name('main');
     Route::resource('posts', PostController::class);
 });

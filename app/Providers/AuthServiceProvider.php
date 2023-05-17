@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Auth\Access\Response;
+use App\Models\UserLogin;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -25,6 +27,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('show-dashboard', function (UserLogin $user) {
+            return ! $user->isUser()
+                ? Response::allow()
+                : Response::deny(__('Sorry, You do not have access to the dashboard.'));
+        });
     }
 }

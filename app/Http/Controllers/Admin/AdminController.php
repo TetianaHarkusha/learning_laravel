@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class AdminController extends Controller
 {
@@ -15,6 +16,12 @@ class AdminController extends Controller
      */
     public function main(Request $request)  
     {
+        //Prohibition of access to the dashboard for users with the role "user"
+        $response = Gate::inspect('show-dashboard');
+        if ($response->denied()) {
+            return redirect()->route('main')->with('message',$response->message());
+        };
+
         //added counter and time in the session
         date_default_timezone_set('Europe/Kiev');
         if ($request->session()->has('count')) {
