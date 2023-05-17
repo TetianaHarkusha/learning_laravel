@@ -13,5 +13,6 @@
         <li><a href={{route('homework.lesson', ['id' => 11])}}> Лекція 11. Життєвий цикл запитання</a></li>
         <li><a href={{route('homework.lesson', ['id' => 12])}}> Лекція 12. Валідація</a></li>
         <li><a href={{route('homework.lesson', ['id' => 14])}}> Лекція 14. Сесія HTTP</a></li>
+        <li><a href={{route('homework.lesson', ['id' => 15])}}> Лекція 15. Аутентицікація/Авторизація</a></li>
     </ul>
 @endsection

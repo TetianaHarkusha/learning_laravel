@@ -11,6 +11,9 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\HomeworkController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\Auth\UserLoginController;
+use App\Http\Controllers\Auth\EmailVerificationController;
+use App\Http\Controllers\Auth\PasswordResettingController;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Artisan;
 
@@ -173,7 +176,33 @@ if (app()->environment() == 'local') {
 };
 
 //routes for Admin Dashboard
-Route::prefix('dashboard')->name('dashboard.')->group(function() {
+Route::prefix('dashboard')->name('dashboard.')->middleware(['verified', 'auth'])->group(function() {
     Route::get('', [AdminController::class, 'main'])->name('main');
     Route::resource('posts', PostController::class);
+});
+
+//routes for Authentication
+Route::get('/login', [UserLoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [UserLoginController::class, 'storeLogin']);
+
+Route::post('/logout', [UserLoginController::class, 'logout'])->name('logout');
+
+Route::get('/register', [UserLoginController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [UserLoginController::class, 'storeRegister']);
+
+//routes for Email Verification
+Route::prefix('email')->name('verification.')->group( function(){
+    Route::prefix('verify')->group(function(){
+        Route::get('', [EmailVerificationController::class, 'showNotice'])->middleware('auth')->name('notice');
+        Route::get('/{id}/{hash}',[EmailVerificationController::class, 'verify'])->middleware(['auth', 'signed'])->name('verify');
+    });
+    Route::post('/verification-notification',[EmailVerificationController::class, 'resend'])->middleware(['auth', 'throttle:6,1'])->name('resend');
+});
+
+//routes for Resetting Passwords
+Route::name('password.')->middleware('guest')->group( function(){
+    Route::get('/forgot-password', [PasswordResettingController::class, 'showFormForgot'])->name('request');
+    Route::post('/forgot-password', [PasswordResettingController::class, 'sendLink'])->name('email');
+    Route::get('/reset-password/{token}', [PasswordResettingController::class, 'showFormReset'])->name('reset');
+    Route::post('/reset-password', [PasswordResettingController::class, 'update'])->name('update');
 });

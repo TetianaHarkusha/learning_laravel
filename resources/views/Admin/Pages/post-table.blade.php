@@ -12,6 +12,14 @@
             </div>
         </div>
         <div class="card">
+            <div class="card-info">   
+                @if (session('message'))
+                    <div class="alert alert-warning" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="true">×</button>
+                        <h4><i class="icon fa fa-info-circle"></i>{{ session('message') }}</h4>
+                    </div>  
+                @endif
+            </div>
             <div class="card-info">
                 @if (session('success'))
                     <div class="alert alert-success" role="alert">
@@ -25,8 +33,9 @@
                 <thead>
                     <tr>
                         <th style="width: 5%">#</th>
-                        <th style="width: 30%">Заголовок</th>
-                        <th style="width: 30%">Slug</th>
+                        <th style="width: 25%">Заголовок</th>
+                        <th style="width: 25%">Slug</th>
+                        <th style="width: 10%">Автор</th>
                         <th style="width: 5%">Вподобайки</th>
                     </tr>
                 </thead>
@@ -46,6 +55,7 @@
                         <td>
                             <i class="nav-icon fas fa-thumbs-up"></i> {{$post->likes}}
                         </td>
+                        <td>{{$post->user->name}}</td>
                         <td class="project-actions text-right">
                             <a class="btn btn-primary btn-sm" href="{{ route('dashboard.posts.show', ['post' => $post]) }}">
                                 <i class="fas fa-folder"></i> Див.

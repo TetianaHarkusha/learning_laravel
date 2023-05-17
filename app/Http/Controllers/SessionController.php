@@ -42,7 +42,6 @@ class SessionController extends Controller
         $request->session()->push('test', 'PHP');
         $request->session()->push('test', 'OOP PHP');
         $request->session()->push('test', 'Laravel');
-        //dd($request->session()->all());
         
         return dd($request->session()->get('test'));
     }

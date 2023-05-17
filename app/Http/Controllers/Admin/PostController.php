@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Admin\StoreUpdatePostRequest;
 use App\Models\Post;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -17,6 +18,11 @@ class PostController extends Controller
      */
     public function index()
     {
+        $response = Gate::inspect('viewAny', Post::class);
+        if ($response->denied()) {
+            return back()->with('message',$response->message());
+        };
+
         return view('Admin.Pages.post-table', [
             'title' => 'публікації',
             'pageName' => 'Список публікацій',
@@ -31,6 +37,11 @@ class PostController extends Controller
      */
     public function create() 
     {
+        $response = Gate::inspect('create', Post::class);
+        if ($response->denied()) {
+            return back()->with('message', $response->message());
+        };
+
         return view('Admin.Pages.post-form', [
             'title' => 'створити публікацію',
             'pageName' => 'Створити нову публікацію',
@@ -47,14 +58,20 @@ class PostController extends Controller
      */
     public function store(StoreUpdatePostRequest $request)
     {
-        $user = new Post;
-        $user->title = $request->input('title');
-        $user->slug = Str::of($request->input('title'))->slug('-');
-        $user->text = $request->input('text');
-        $user->likes = $request->input('likes');
-        $user->save();
+        $response = Gate::inspect('create', Post::class);
+        if ($response->denied()) {
+            return back()->with('message',$response->message());
+        };
+
+        $post = new Post;
+        $post->title = $request->input('title');
+        $post->slug = Str::of($request->input('title'))->slug('-');
+        $post->text = $request->input('text');
+        $post->likes = $request->input('likes');
+        $post->user_id = $request->user()->user_id;
+        $post->save();
         
-        return back()->withSuccess('Публікація була успішно додана.');
+        return back()->withSuccess( __('The post was successfully added.'));
     }
 
     /**
@@ -65,10 +82,17 @@ class PostController extends Controller
      */
     public function show($id)
     {
+        $post = Post::find($id);
+
+        $response = Gate::inspect('view', $post);
+        if ($response->denied()) {
+            return back()->with('message',$response->message());
+        };
+
         return view('Admin.Pages.post-form', [
             'title' => 'переглянути публікацію',
             'pageName' => 'Переглянути публікацію з id=' . $id,
-            'post' => Post::find($id),
+            'post' => $post,
             'method' => 'show',
         ]);
     }
@@ -81,10 +105,17 @@ class PostController extends Controller
      */
     public function edit($id)
     {
+        $post = Post::find($id);
+
+        $response = Gate::inspect('update', $post);
+        if ($response->denied()) {
+            return back()->with('message',$response->message());
+        };
+
         return view('Admin.Pages.post-form', [
             'title' => 'змінити публікацію',
             'pageName' => 'Змінити публікацію з id=' . $id,
-            'post' => Post::find($id),
+            'post' => $post,
             'method' => 'edit',
         ]);
     }
@@ -98,14 +129,20 @@ class PostController extends Controller
      */
     public function update(StoreUpdatePostRequest $request, $id)
     {
-        $user = Post::find($id);
-        $user->title = $request->input('title');
-        $user->slug = Str::of($request->input('title'))->slug('-');
-        $user->text = $request->input('text');
-        $user->likes = $request->input('likes');
-        $user->save();
+        $post = Post::find($id);
+
+        $response = Gate::inspect('update', $post);
+        if ($response->denied()) {
+            return back()->with('message',$response->message());
+        };
+
+        $post->title = $request->input('title');
+        $post->slug = Str::of($request->input('title'))->slug('-');
+        $post->text = $request->input('text');
+        $post->likes = $request->input('likes');
+        $post->save();
         
-        return back()->withSuccess('Публікація була успішно змінена.');
+        return redirect()->route('dashboard.posts.edit', ['post' => $id])->withSuccess( __('The post was successfully modified.'));
     }
 
     /**
@@ -116,7 +153,15 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
+        $post = Post::find($id);
+
+        $response = Gate::inspect('delete', $post);
+        if ($response->denied()) {
+            return back()->with('message',$response->message());
+        };
+
         Post::destroy($id);
-        return back()->withSuccess('Публікація була успішно видалена.');
+
+        return back()->withSuccess( __('The post was successfully deleted'));
     }
 }

@@ -69,6 +69,13 @@
                             </div>
                             @if ($method == 'show')
                             <div class="form-group row">
+                                <label for="inputUser" class="col-sm-2 col-form-label">Автор</label>
+                                <div class="col-sm-10">
+                                <input type="text" name="user" readonly class="form-control" id="inputUser" 
+                                    value="{{old('uder') ?? $post->user->name ?? ''}}" placeholder="slug">
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label for="created_at" class="col-sm-2 col-form-label">Дата створення</label>
                                 <div class="col-sm-10">
                                 <input type="text" readonly class="form-control" id="created_at" value="{{ $post->created_at }}">

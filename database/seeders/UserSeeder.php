@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
     {
         $positions = DB::table('positions')->pluck('id'); //collection position_id
         $cities = DB::table('cities')->pluck('id'); //collection city_id
-        $usersId = DB::table('cities')->pluck('id'); //collection id
+        $usersId = DB::table('users')->pluck('id'); //collection id
 
         foreach ($usersId as $id) {
             DB::table('users')->where('id', $id)
