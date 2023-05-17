@@ -52,6 +52,7 @@ class PostController extends Controller
         $post->slug = Str::of($request->input('title'))->slug('-');
         $post->text = $request->input('text');
         $post->likes = $request->input('likes');
+        $post->user_id = $request->user()->user_id;
         $post->save();
         
         return back()->withSuccess('Публікація була успішно додана.');
@@ -105,7 +106,8 @@ class PostController extends Controller
         $post->likes = $request->input('likes');
         $post->save();
         
-        return back()->withSuccess('Публікація була успішно змінена.');
+        //return back()->withSuccess('Публікація була успішно змінена.');
+        return redirect()->route('dashboard.posts.edit', ['post' => $id])->withSuccess('Публікація була успішно змінена.');
     }
 
     /**
