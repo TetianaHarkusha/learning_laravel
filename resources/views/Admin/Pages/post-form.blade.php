@@ -91,12 +91,12 @@
                             @endif
                             @if ($method == 'edit')
                             @method('PATCH')
-                            <button type="submit" class="btn btn-info" formaction="{{ route('dashboard.posts.update', ['post' => $post->id]) }}">
+                            <button type="submit" class="btn btn-info" formaction="{{ route('dashboard.posts.update', ['post' => $post]) }}">
                                 <i class="fas fa-sd-card"></i> Зберегти зміни
                             </button>
                             @endif
                             @if ($method == 'show')
-                            <button type="submit" class="btn btn-info" formmethod="get" formaction="{{ route('dashboard.posts.edit', ['post' => $post->id]) }}">
+                            <button type="submit" class="btn btn-info" formmethod="get" formaction="{{ route('dashboard.posts.edit', ['post' => $post]) }}">
                                 <i class="fas fa-pencil-alt"></i> Редагувати
                             </button>
                             @endif

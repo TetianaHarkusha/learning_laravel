@@ -9,6 +9,8 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\HomeworkController;
+use App\Http\Controllers\SessionController;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Artisan;
 
@@ -29,13 +31,16 @@ Route::get('/', function () {
 })->name('main');
 
 // grouped routes 'homework'
-Route::name('homework')->prefix('homework')->group(function () {
-    Route::get('', function () {
-        return view('Pages.homework.list', ['title' => 'Homework']);
-    })->name('.list');
-    Route::get('/{id}', function ($id) {
-        return view('Pages.homework.lesson'. $id, ['title' => 'Homework']);
-    })->name('.lesson');
+Route::name('homework.')->prefix('homework')->group(function () {
+    Route::get('', [HomeworkController::class, 'showAll'])->name('list');
+    Route::get('/{id}', [HomeworkController::class, 'showOne'])->name('lesson');
+});
+
+// grouped routes 'session'
+Route::name('session.')->prefix('session')->group(function () {
+    Route::get('/forget', [SessionController::class, 'destroy'])->name('destroy');
+    Route::get('/flush', [SessionController::class, 'destroyAll'])->name('destroyAll');
+    Route::get('/array', [SessionController::class, 'setGetArray'])->name('array');
 });
 
 //grouped routes 'posts'
@@ -50,11 +55,13 @@ Route::prefix('post')->name('post.')->group(function () {
     Route::get('/{catId}/{postId}', [PostController::class, 'show'])->name('catAndPostId');
 });
 
-// routes for p.3
-Route::match(['get', 'post'], '/test', [TestController::class, 'testForm'])
-    ->middleware('setLocale:uk')->name('test.form');
-
-Route::get('/test/response/{id}', [TestController::class, 'myResponse'])->name('test.response');
+// routes for test
+Route::prefix('test')->name('test.')->group(function () {
+    Route::match(['get', 'post'], '', [TestController::class, 'testForm'])
+    ->middleware('setLocale:uk')->name('form');
+    
+    Route::get('/response/{id}', [TestController::class, 'myResponse'])->name('response');
+});
 
 Route::get('/dir/test', function () {
     return 'Тестова сторінка в dir';
@@ -103,8 +110,10 @@ Route::prefix('user')->name('user.')->group(function () {
         Route::prefix('position')->name('position.')->group(function () {
             Route::get('one', [UserController::class, 'showOneWithCityAndPosition'])
             ->name('one');
+
             Route::get('all', [UserController::class, 'showAllWithCityAndPosition'])
             ->name('all');
+
             Route::get('query/{id}', [UserController::class, 'showWithCityAndPositionQuery'])
             ->name('query');
         });
