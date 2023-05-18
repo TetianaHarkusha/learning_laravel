@@ -18,13 +18,14 @@ class PostFactory extends Factory
      */
     public function definition()
     {
-        $title = $this->faker->unique()->sentence();
+        $title = fake()->unique()->sentence();
         $slug = Str::of($title)->slug('-');
         return [
             'title' => $title,
             'slug' => $slug,
+            'text' => fake()->realText(),
             //the probability of receiving the default value likes
-            'likes' => $this->faker->optional(0.5, 0)->numberBetween(1, 100),
+            'likes' => fake()->optional(0.5, 0)->numberBetween(1, 100),
         ];
     }
 }

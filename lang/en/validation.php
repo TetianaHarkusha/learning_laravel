@@ -145,6 +145,9 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'num1' => [
+            'numeric' => "The field 'first number' must be a number or undefined",
+        ],
     ],
 
     /*
@@ -158,6 +161,9 @@ return [
     |
     */
 
-    'attributes' => [],
-
+    'attributes' => [
+        'num1' => "field 'first number'",
+        'num2' => "field 'second number'",
+        'num3' => "field 'third number'",
+    ],
 ];
