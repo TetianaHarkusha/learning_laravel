@@ -8,4 +8,20 @@
         <a href="{{route('dashboard.main')}}" class="nav-link">Головна</a>
       </li>
     </ul>
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <form name="changelang" action="{{ route('locale') }}" method="POST">
+        @csrf
+          <select onchange="document.changelang.submit()" name="lang" class="form-select" aria-label="Default select example">
+              <option selected>{{ Str::upper(app()->getLocale()) }}</option>
+              @foreach (Config::get('languages') as $lang => $language)
+                  @if ($lang != app()->getLocale())
+                      <option value="{{ $lang }}">{{ Str::upper($lang) }}</option>
+                  @endif
+              @endforeach
+          </select>
+        </form>
+      </li>
+    </ul>
 </nav>

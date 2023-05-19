@@ -5,9 +5,8 @@
 @endsection
 
 @section('content')
-    <h1>Головна сторінка</h1>
-    <h2>Main page</h2>
-    <h3>Це мій навчальній проект на <b>Laravel</b></h3> 
+    <h1>{{ __('Main page') }}</h1>
+    <h3>{{ __('This is my stady project by') }}<b> Laravel</b></h3> 
     <div class="card-body">   
         @if (session('message'))
             <div class="alert alert-warning d-flex bd-highlight" role="alert">
@@ -16,5 +15,5 @@
                 <button type="button" class="bd-highlight btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>  
         @endif
-    </div>
+    </div>   
 @endsection
