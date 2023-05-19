@@ -24,8 +24,8 @@ class PostController extends Controller
         };
 
         return view('Admin.Pages.post-table', [
-            'title' => 'публікації',
-            'pageName' => 'Список публікацій',
+            'title' => 'posts',
+            'pageName' => __('List') . ' ' . __('of posts'),
             'posts' => Post::paginate(10),
         ]);
     }
@@ -43,8 +43,8 @@ class PostController extends Controller
         };
 
         return view('Admin.Pages.post-form', [
-            'title' => 'створити публікацію',
-            'pageName' => 'Створити нову публікацію',
+            'title' => 'create',
+            'pageName' => __('Create a new post'),
             'method' => 'create',
             'action' => 'dashboard.posts.store',
         ]);
@@ -90,8 +90,8 @@ class PostController extends Controller
         };
 
         return view('Admin.Pages.post-form', [
-            'title' => 'переглянути публікацію',
-            'pageName' => 'Переглянути публікацію з id=' . $id,
+            'title' => 'view post',
+            'pageName' => __('View post with') .' id= ' . $id,
             'post' => $post,
             'method' => 'show',
         ]);
@@ -113,8 +113,8 @@ class PostController extends Controller
         };
 
         return view('Admin.Pages.post-form', [
-            'title' => 'змінити публікацію',
-            'pageName' => 'Змінити публікацію з id=' . $id,
+            'title' => 'edit post',
+            'pageName' =>  __('Edit post with') .' id= ' . $id,
             'post' => $post,
             'method' => 'edit',
         ]);

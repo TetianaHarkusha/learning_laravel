@@ -34,8 +34,8 @@ class AdminController extends Controller
         }
         
         return view('Admin.Pages.main', [
-            'title' => 'головна',
-            'pageName' => 'Головна сторінка',
+            'title' => 'main',
+            'pageName' => __('Main page'),
             'postCount' => DB::table('posts')->count(),
             'userCount' => DB::table('users')->count(),
         ]);

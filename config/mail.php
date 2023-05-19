@@ -13,7 +13,9 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'smtp'),
+    'default' => env('DISABLE_EMAIL', false)
+        ? 'log'
+        : env('MAIL_MAILER', 'failover'),
 
     /*
     |--------------------------------------------------------------------------
@@ -34,6 +36,13 @@ return [
     */
 
     'mailers' => [
+        'failover' => [
+            'transport' => 'failover',
+            'mailers' => [
+                'smtp',
+                'log',
+            ],
+        ],
         'smtp' => [
             'transport' => 'smtp',
             'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
@@ -43,7 +52,6 @@ return [
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
         ],
-
         'ses' => [
             'transport' => 'ses',
         ],
@@ -91,7 +99,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
+        'address' => env('MAIL_FROM_ADDRESS', 'laravel.study@example.com'),
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 

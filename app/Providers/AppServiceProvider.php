@@ -31,13 +31,13 @@ class AppServiceProvider extends ServiceProvider
         View::share('name', 'John');
         View::share('surname', 'Smit');
 
-        // Listening For Query Events
-        DB::listen(function (QueryExecuted $query) {
+        // Listening For Query Events -- disable
+        /*DB::listen(function (QueryExecuted $query) {
             Log::info("
             Sql: $query->sql
             Time: $query->time
             ------------------");
-        });
+        });*/
 
         Paginator::useBootstrap();
     }
