@@ -9,6 +9,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\DB;
 
 class UserLogin extends Authenticatable implements MustVerifyEmail
 {
@@ -46,7 +47,7 @@ class UserLogin extends Authenticatable implements MustVerifyEmail
     {
         return $this->user->email;
     }
-
+    
     /**
      * Checks if the user has the "administrator" role
      */
@@ -61,5 +62,17 @@ class UserLogin extends Authenticatable implements MustVerifyEmail
     public function isUser()
     {
         return $this->role->name == 'user';
+    }
+
+    /**
+     * Get the all admins
+     * 
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public static function getAdmins()
+    {
+        $admins = UserLogin::where('role_id', DB::table('roles')->where('name', 'administrator')->value('id'))->get();
+        
+        return $admins;
     }
 }

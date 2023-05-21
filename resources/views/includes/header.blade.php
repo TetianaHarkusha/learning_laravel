@@ -23,7 +23,7 @@
         </select>
         </form>
     @if (Auth::check())
-        <a href="" class="btn btn-outline-primary me-2 disabled" role="button">{{ __('Login name')}}: {{Auth::user()->login}}</a>
+        <a href="" class="btn btn-outline-primary me-2 disabled" role="button">{{ __(Auth::user()->login) }}</a>
         <a href="{{ route('logout') }}" class="btn btn-primary" 
             onclick="event.preventDefault();
             document.getElementById('logout-form').submit();">

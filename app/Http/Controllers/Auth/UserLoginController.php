@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\DB;
+//for send mails
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UserRegistered;
+use App\Mail\UserRegisteredForAdmin;
 
 class UserLoginController extends Controller
 {
@@ -53,9 +57,12 @@ class UserLoginController extends Controller
         ]);
 
         Auth::login($userLogin);
+        Mail::to($userLogin)->send(new UserRegistered($userLogin));
+        Mail::to(UserLogin::getAdmins())->send(new UserRegisteredForAdmin($userLogin));
         event(new Registered($userLogin));
 
         return back()->withSuccess(__('The user has been successfully registered.'));
+
     }
 
     /**
