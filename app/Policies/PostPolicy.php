@@ -35,7 +35,7 @@ class PostPolicy
     {
         return !($userLogin->isUser())
             ? Response::allow()
-            : Response::deny( __('Sorry, You do not have access to view posts.'));
+            : Response::deny( __('messages.policy-post-viewAny'));
     }
 
     /**
@@ -49,7 +49,7 @@ class PostPolicy
     {
         return ($userLogin->user_id === $post->user_id)
             ? Response::allow()
-            : Response::deny( __('Sorry, You do not have access to view this post.'));
+            : Response::deny( __('messages.policy-post-view'));
     }
 
     /**
@@ -62,7 +62,7 @@ class PostPolicy
     {
         return !$userLogin->isUser()
             ? Response::allow()
-            : Response::deny( __('Sorry, You do not have access to create posts.'));
+            : Response::deny( __('messages.policy-post-create'));
     }
 
     /**
@@ -76,7 +76,7 @@ class PostPolicy
     {
         return $userLogin->user_id === $post->user_id
             ? Response::allow()
-            : Response::deny( __('Sorry, You do not have access to update this post.'));
+            : Response::deny( __('messages.policy-post-update'));
     }
 
     /**
@@ -90,7 +90,7 @@ class PostPolicy
     {
         return $userLogin->user_id === $post->user_id
             ? Response::allow()
-            : Response::deny( __('Sorry, You do not have access to delete this post.'));
+            : Response::deny( __('messages.policy-post-delete'));
     }
 
     /**
@@ -104,7 +104,7 @@ class PostPolicy
     {
         return $userLogin->user_id === $post->user_id
             ? Response::allow()
-            : Response::deny( __('Sorry, You do not have access to restore posts.'));
+            : Response::deny( __('messages.policy-post-restore'));
     }
 
     /**
@@ -118,6 +118,6 @@ class PostPolicy
     {
         return $userLogin->user_id === $post->user_id
             ? Response::allow()
-            : Response::deny( __('Sorry, You do not have access to delete posts.'));
+            : Response::deny( __('messages.policy-post-delete'));
     }
 }

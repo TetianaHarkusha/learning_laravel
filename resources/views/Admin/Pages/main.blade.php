@@ -22,12 +22,12 @@
                 <div class="small-box bg-info">
                 <div class="inner">
                     <h3>{{$userCount}}</h3>
-                    <p>Користувачі</p>
+                    <p>{{ __('Users')}}</p>
                 </div>
                 <div class="icon">
                     <i class="ion ion-bag"></i>
                 </div>
-                <a href="#" class="small-box-footer">Більше інформації <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="#" class="small-box-footer">{{ __('More...')}} <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
@@ -36,12 +36,12 @@
                 <div class="small-box bg-success">
                 <div class="inner">
                     <h3>{{$postCount}}</h3>
-                    <p>Публікації</p>
+                    <p>{{ __('Posts')}}</p>
                 </div>
                 <div class="icon">
                     <i class="ion ion-stats-bars"></i>
                 </div>
-                <a href="{{ route('dashboard.posts.index')}}" class="small-box-footer">Більше інформації 
+                <a href="{{ route('dashboard.posts.index')}}" class="small-box-footer">{{ __('More...')}}
                     <i class="fas fa-arrow-circle-right"></i>
                 </a>
                 </div>

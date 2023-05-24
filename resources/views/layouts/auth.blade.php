@@ -47,6 +47,17 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
+                        <form name="changelang" class="form me-2" action="{{ route('locale') }}" method="POST">
+                            @csrf
+                            <select onchange="document.changelang.submit()" name="lang" class="form-select" aria-label="Default select example">
+                                <option selected>{{ Str::upper(app()->getLocale()) }}</option>
+                                @foreach (Config::get('languages') as $lang => $language)
+                                    @if ($lang != app()->getLocale())
+                                        <option value="{{ $lang }}">{{ Str::upper($lang) }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </form>
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">

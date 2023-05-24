@@ -31,7 +31,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('show-dashboard', function (UserLogin $user) {
             return ! $user->isUser()
                 ? Response::allow()
-                : Response::deny(__('Sorry, You do not have access to the dashboard.'));
+                : Response::deny( __('messages.show-dashboard'));
         });
     }
 }

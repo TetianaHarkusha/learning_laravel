@@ -7,10 +7,19 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Admin\StoreUpdatePostRequest;
 use App\Models\Post;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
+    /**
+     * Create the controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Post::class, 'post');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,14 +27,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        $response = Gate::inspect('viewAny', Post::class);
-        if ($response->denied()) {
-            return back()->with('message',$response->message());
-        };
-
         return view('Admin.Pages.post-table', [
-            'title' => 'публікації',
-            'pageName' => 'Список публікацій',
+            'title' => 'posts',
+            'pageName' => __('List') . ' ' . __('of posts'),
             'posts' => Post::paginate(10),
         ]);
     }
@@ -37,14 +41,9 @@ class PostController extends Controller
      */
     public function create() 
     {
-        $response = Gate::inspect('create', Post::class);
-        if ($response->denied()) {
-            return back()->with('message', $response->message());
-        };
-
         return view('Admin.Pages.post-form', [
-            'title' => 'створити публікацію',
-            'pageName' => 'Створити нову публікацію',
+            'title' => 'create',
+            'pageName' => __('Create a new post'),
             'method' => 'create',
             'action' => 'dashboard.posts.store',
         ]);
@@ -58,11 +57,6 @@ class PostController extends Controller
      */
     public function store(StoreUpdatePostRequest $request)
     {
-        $response = Gate::inspect('create', Post::class);
-        if ($response->denied()) {
-            return back()->with('message',$response->message());
-        };
-
         $post = new Post;
         $post->title = $request->input('title');
         $post->slug = Str::of($request->input('title'))->slug('-');
@@ -77,21 +71,14 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Posts $post
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        $post = Post::find($id);
-
-        $response = Gate::inspect('view', $post);
-        if ($response->denied()) {
-            return back()->with('message',$response->message());
-        };
-
         return view('Admin.Pages.post-form', [
-            'title' => 'переглянути публікацію',
-            'pageName' => 'Переглянути публікацію з id=' . $id,
+            'title' => 'view post',
+            'pageName' => __('View post with') .' id= ' . $post->id,
             'post' => $post,
             'method' => 'show',
         ]);
@@ -100,21 +87,14 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Posts $post
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        $post = Post::find($id);
-
-        $response = Gate::inspect('update', $post);
-        if ($response->denied()) {
-            return back()->with('message',$response->message());
-        };
-
         return view('Admin.Pages.post-form', [
-            'title' => 'змінити публікацію',
-            'pageName' => 'Змінити публікацію з id=' . $id,
+            'title' => 'edit post',
+            'pageName' =>  __('Edit post with') .' id= ' . $post->id,
             'post' => $post,
             'method' => 'edit',
         ]);
@@ -124,43 +104,29 @@ class PostController extends Controller
      * Update the specified resource in storage.
      *
      * @param  App\Http\Requests\Admin\StoreUpdatePostRequest  $request
-     * @param  int  $id
+     * @param  \App\Models\Posts $post
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreUpdatePostRequest $request, $id)
+    public function update(StoreUpdatePostRequest $request, Post $post)
     {
-        $post = Post::find($id);
-
-        $response = Gate::inspect('update', $post);
-        if ($response->denied()) {
-            return back()->with('message',$response->message());
-        };
-
         $post->title = $request->input('title');
         $post->slug = Str::of($request->input('title'))->slug('-');
         $post->text = $request->input('text');
         $post->likes = $request->input('likes');
         $post->save();
         
-        return redirect()->route('dashboard.posts.edit', ['post' => $id])->withSuccess( __('The post was successfully modified.'));
+        return redirect()->route('dashboard.posts.edit', ['post' => $post->id])->withSuccess( __('The post was successfully modified.'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Posts $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        $post = Post::find($id);
-
-        $response = Gate::inspect('delete', $post);
-        if ($response->denied()) {
-            return back()->with('message',$response->message());
-        };
-
-        Post::destroy($id);
+        Post::destroy($post);
 
         return back()->withSuccess( __('The post was successfully deleted'));
     }

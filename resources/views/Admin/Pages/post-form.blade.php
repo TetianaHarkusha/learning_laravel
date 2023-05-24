@@ -30,7 +30,7 @@
                             @csrf
                             @if ($method == 'show')
                             <div class="form-group row">
-                                <label for="inputId" class="col-sm-2 col-form-label">Ідентифікатор</label>
+                                <label for="inputId" class="col-sm-2 col-form-label">{{ __('Identifier')}}</label>
                                 <div class="col-sm-10">
                                 <input type="text" name="id" readonly class="form-control" id="inputId" 
                                     value="{{old('id') ?? $post->id ?? ''}}" placeholder="Ідентифікатор (не заповнювати)">
@@ -38,7 +38,7 @@
                             </div>
                             @endif
                             <div class="form-group row">
-                                <label for="inputTitle" class="col-sm-2 col-form-label">Заголовок</label>
+                                <label for="inputTitle" class="col-sm-2 col-form-label">{{ __('Title')}}</label>
                                 <div class="col-sm-10">
                                 <input type="text" name="title" @if($method == 'show') readonly @endif class="form-control" id="inputTitle" 
                                     value="{{old('title') ?? $post->title ?? ''}}" placeholder="Заголовок публікації">
@@ -54,14 +54,14 @@
                             </div>
                             @endif
                             <div class="form-group row">
-                                <label for="text" class="col-sm-2 col-form-label">Вміст</label>
+                                <label for="text" class="col-sm-2 col-form-label">{{ __('Contents')}}</label>
                                 <div class="col-sm-10">
                                 <textarea name="text" id="text" class="form-control" rows="5" @if($method == 'show') readonly @endif 
                                     placeholder="Введіть текс публікації...">{{old('text') ?? $post->text ?? ''}}</textarea>  
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="inputLikes" class="col-sm-2 col-form-label">Вподобайки</label>
+                                <label for="inputLikes" class="col-sm-2 col-form-label">{{ __('Likes')}}</label>
                                 <div class="col-sm-10">
                                 <input type="text" name="likes" @if($method == 'show') readonly @endif class="form-control" id="inputLikes" 
                                     value="{{old('likes') ?? $post->likes ?? 0}}" placeholder="Кількість вподобайок">
@@ -69,20 +69,20 @@
                             </div>
                             @if ($method == 'show')
                             <div class="form-group row">
-                                <label for="inputUser" class="col-sm-2 col-form-label">Автор</label>
+                                <label for="inputUser" class="col-sm-2 col-form-label">{{ __('Author')}}</label>
                                 <div class="col-sm-10">
                                 <input type="text" name="user" readonly class="form-control" id="inputUser" 
                                     value="{{old('uder') ?? $post->user->name ?? ''}}" placeholder="slug">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="created_at" class="col-sm-2 col-form-label">Дата створення</label>
+                                <label for="created_at" class="col-sm-2 col-form-label">{{ __('Date')}} {{ __('of created')}}</label>
                                 <div class="col-sm-10">
                                 <input type="text" readonly class="form-control" id="created_at" value="{{ $post->created_at }}">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="update_at" class="col-sm-2 col-form-label">Дата змін</label>
+                                <label for="update_at" class="col-sm-2 col-form-label">{{ __('Date')}} {{ __('of changed')}}</label>
                                 <div class="col-sm-10">
                                 <input type="text" readonly class="form-control" id="update_at" value="{{ $post->updated_at }}">
                                 </div>
@@ -93,22 +93,22 @@
                             <div class="card-footer">
                             @if ($method == 'create')
                             <button type="submit" class="btn btn-info" formmethod="post" formaction="{{ route('dashboard.posts.store') }}">
-                                <i class="fas fa-sd-card"></i> Зберегти
+                                <i class="fas fa-sd-card"></i> {{ _('Save') }}
                             </button>
                             @endif
                             @if ($method == 'edit')
                             @method('PATCH')
                             <button type="submit" class="btn btn-info" formaction="{{ route('dashboard.posts.update', ['post' => $post]) }}">
-                                <i class="fas fa-sd-card"></i> Зберегти зміни
+                                <i class="fas fa-sd-card"></i> {{ _('Save') }} {{ __('changes') }}
                             </button>
                             @endif
                             @if ($method == 'show')
                             <button type="submit" class="btn btn-info" formmethod="get" formaction="{{ route('dashboard.posts.edit', ['post' => $post]) }}">
-                                <i class="fas fa-pencil-alt"></i> Редагувати
+                                <i class="fas fa-pencil-alt"></i> {{ _('Edit') }}
                             </button>
                             @endif
                             <button type="submit" class="btn btn-secondary float-right" formmethod="get" formaction="{{ route('dashboard.main') }}">
-                                <i class="fas fa-ban"></i> Вийти
+                                <i class="fas fa-ban"></i> {{ _('Exit') }}
                             </button>
                             </div>
                             <!-- /.card-footer -->

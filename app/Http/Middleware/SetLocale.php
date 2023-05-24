@@ -12,12 +12,13 @@ class SetLocale
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @param $lang The language key
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, string $lang)
+    public function handle(Request $request, Closure $next)
     {
-        app()->setLocale($lang);
+        if ($request->session()->has('locale')) {
+            app()->setLocale($request->session()->get('locale'));
+        }
         return $next($request);
     }
 }

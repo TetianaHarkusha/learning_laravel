@@ -3,32 +3,31 @@
     <li class="nav-item">
     <a href="{{route('dashboard.main')}}" class="nav-link">
         <i class="nav-icon fas fa-tachometer-alt"></i>
-        <p>Головна сторінка</p>
+        <p>{{ __('Main page') }}</p>
     </a>
     </li>
     <li class="nav-item">
     <a href="#" class="nav-link">
         <i class="nav-icon fas fa-user"></i>
-        <p>
-        Користувачі
+        <p>{{  __('Users') }}
         <i class="right fas fa-angle-left"></i>
         </p>
     </a>
     <ul class="nav nav-treeview">
         <li class="nav-item">
         <a href="#" class="nav-link">
-            <p>Список користувачів</p>
+            <p>{{ __('List') }} {{ __('of users')}}</p>
         </a>
         </li>
         <li class="nav-item">
         <a href="#" class="nav-link">
-            <p>Список адмінів</p>
+            <p>{{ __('List') }} {{ __('of admins')}}</p>
         </a>
         </li>
         </li>
         <li class="nav-item">
         <a href="#" class="nav-link">
-            <p>Створити нового</p>
+            <p>{{ __('Create') }} </p>
         </a>
         </li>
     </ul>
@@ -36,20 +35,19 @@
     <li class="nav-item">
     <a href="#" class="nav-link">
         <i class="nav-icon fas fa-newspaper"></i>
-        <p>
-        Публікації
+        <p>{{ __('Posts') }}
         <i class="right fas fa-angle-left"></i>
         </p>
     </a>
     <ul class="nav nav-treeview">
         <li class="nav-item">
         <a href="{{route('dashboard.posts.index')}}" class="nav-link">
-            <p>Переглянути всі</p>
+            <p>{{ __('View') }} {{ __('all') }}</p>
         </a>
         </li>
         <li class="nav-item">
         <a href="{{route('dashboard.posts.create')}}" class="nav-link">
-            <p>Створити нову</p>
+            <p>{{ __('Create') }}</p>
         </a>
         </li>
     </ul>
@@ -57,7 +55,7 @@
     <li class="nav-item">
     <a href="{{route('main')}}" class="nav-link">
         <i class="nav-icon fas fa-home"></i>
-        <p>Головна сторінка сайту</p>
+        <p>{{ __('Go to site') }}</p>
     </a>
     </li>
 </ul>

@@ -33,10 +33,10 @@
                 <thead>
                     <tr>
                         <th style="width: 5%">#</th>
-                        <th style="width: 25%">Заголовок</th>
+                        <th style="width: 25%">{{ __('Title') }}</th>
                         <th style="width: 25%">Slug</th>
-                        <th style="width: 10%">Автор</th>
-                        <th style="width: 5%">Вподобайки</th>
+                        <th style="width: 10%">{{ __('Author') }}</th>
+                        <th style="width: 5%">{{ __('Likes') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,7 +48,7 @@
                                 {{$post->title}}
                             </a><br>
                             <small>
-                                Створено {{$post->created_at}}
+                                {{ __('Created')}} {{$post->created_at}}
                             </small>
                         </td>
                         <td>{{$post->slug}}</td>
@@ -58,17 +58,16 @@
                         <td>{{$post->user->name}}</td>
                         <td class="project-actions text-right">
                             <a class="btn btn-primary btn-sm" href="{{ route('dashboard.posts.show', ['post' => $post]) }}">
-                                <i class="fas fa-folder"></i> Див.
+                                <i class="fas fa-folder"></i> {{ __('View') }}
                             </a>
                             <a class="btn btn-info btn-sm" href="{{ route('dashboard.posts.edit', ['post' => $post]) }}">
-                                <i class="fas fa-pencil-alt"></i> Редаг.
+                                <i class="fas fa-pencil-alt"></i> {{ __('Edit') }}
                             </a>
                             <form class="form-btn" action="{{ route('dashboard.posts.destroy', ['post' => $post]) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm delete-btn">
-                                    <i class="fas fa-trash"></i> Видалити
-                                </button>
+                                    <i class="fas fa-trash"></i> {{ __('Delete') }}
                             </form>
                         </td>
                     </tr>
