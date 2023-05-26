@@ -22,7 +22,7 @@ return new class extends Migration
             $table->unsignedBigInteger('role_id')->nullable()->constrained()->after('user_id');
         });
 
-        //seed these columns by random values id from cities and positions
+        //seed this column by id role 'user'
         DB::table('user_logins')->update(['role_id' => $roleUser]);
 
         //add foreign keys

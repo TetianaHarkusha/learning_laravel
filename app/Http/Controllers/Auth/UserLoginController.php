@@ -10,7 +10,7 @@ use App\Models\UserLogin;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\DB;
+use App\Enums\UserRoleEnum;
 //for send mails
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UserRegistered;
@@ -52,7 +52,7 @@ class UserLoginController extends Controller
         
         $userLogin = $user->login()->create([
             'login' => $request->input('login'),
-            'role_id' => DB::table('roles')->where('name', 'user')->value('id'),
+            'role' => UserRoleEnum::USER,     
             'password' => Hash::make($request->input('password')),
         ]);
 
