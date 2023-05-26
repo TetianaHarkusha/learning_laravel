@@ -11,7 +11,7 @@ use Illuminate\Mail\Mailables\Address;
 use Illuminate\Queue\SerializesModels;
 use App\Models\UserLogin;
 
-class UserRegistered extends Mailable
+class UserRegistered extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -31,6 +31,7 @@ class UserRegistered extends Mailable
     public function __construct(UserLogin $userLogin)
     {
         $this->user = $userLogin;
+        $this->onQueue('emails');
     }
 
     /**
@@ -41,7 +42,6 @@ class UserRegistered extends Mailable
     public function envelope()
     {
         return new Envelope(
-            from: new Address('support@laraver.study', 'Support learning Laravel'),
             subject: 'User Registered',
         );
     }
