@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\DB;
+use App\Enums\UserRoleEnum;
 
 class UserLogin extends Authenticatable implements MustVerifyEmail
 {
@@ -20,7 +21,16 @@ class UserLogin extends Authenticatable implements MustVerifyEmail
      *
      * @var array
      */
-    protected $fillable = ['login', 'password', 'role_id'];
+    protected $fillable = ['login', 'password', 'role',];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'role' => UserRoleEnum::class,
+    ];
 
     /**
      * Get the user associated with the login.
@@ -28,14 +38,6 @@ class UserLogin extends Authenticatable implements MustVerifyEmail
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Get the role associated with the login.
-     */
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
     }
 
     /**
@@ -53,7 +55,7 @@ class UserLogin extends Authenticatable implements MustVerifyEmail
      */
     public function isAdmin()
     {
-        return ($this->role->name == 'administrator');
+        return ($this->role === UserRoleEnum::ADMIN);
     }
 
     /**
@@ -61,7 +63,7 @@ class UserLogin extends Authenticatable implements MustVerifyEmail
      */
     public function isUser()
     {
-        return $this->role->name == 'user';
+        return $this->role === UserRoleEnum::USER;
     }
 
     /**
@@ -71,7 +73,7 @@ class UserLogin extends Authenticatable implements MustVerifyEmail
      */
     public static function getAdmins()
     {
-        $admins = UserLogin::where('role_id', DB::table('roles')->where('name', 'administrator')->value('id'))->get();
+        $admins = UserLogin::where('role', UserRoleEnum::ADMIN)->get();
         
         return $admins;
     }

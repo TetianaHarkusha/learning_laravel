@@ -4,12 +4,25 @@ namespace App\Policies;
 
 use App\Models\Post;
 use App\Models\UserLogin;
+use DragonCode\Support\Facades\Helpers\Boolean;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
 class PostPolicy
 {
     use HandlesAuthorization;
+
+    /**
+     * Checks if the user is the author of the post
+     * 
+     * @param  \App\Models\UserLogin  $userLogin
+     * @param  \App\Models\Post $post
+     * @return void|bool
+     */
+    private function isAuthor (UserLogin $userLogin, Post $post): bool
+    {
+        return ($userLogin->user_id === $post->user_id);
+    }
 
     /**
      * Perform pre-authorization checks.
@@ -47,7 +60,7 @@ class PostPolicy
      */
     public function view(UserLogin $userLogin, Post $post)
     {
-        return ($userLogin->user_id === $post->user_id)
+        return $this->isAuthor($userLogin, $post)
             ? Response::allow()
             : Response::deny( __('messages.policy-post-view'));
     }
@@ -74,7 +87,7 @@ class PostPolicy
      */
     public function update(UserLogin $userLogin, Post $post)
     {
-        return $userLogin->user_id === $post->user_id
+        return $this->isAuthor($userLogin, $post)
             ? Response::allow()
             : Response::deny( __('messages.policy-post-update'));
     }
@@ -88,7 +101,7 @@ class PostPolicy
      */
     public function delete(UserLogin $userLogin, Post $post)
     {
-        return $userLogin->user_id === $post->user_id
+        return $this->isAuthor($userLogin, $post)
             ? Response::allow()
             : Response::deny( __('messages.policy-post-delete'));
     }
@@ -102,7 +115,7 @@ class PostPolicy
      */
     public function restore(UserLogin $userLogin, Post $post)
     {
-        return $userLogin->user_id === $post->user_id
+        return $this->isAuthor($userLogin, $post)
             ? Response::allow()
             : Response::deny( __('messages.policy-post-restore'));
     }
@@ -116,7 +129,7 @@ class PostPolicy
      */
     public function forceDelete(UserLogin $userLogin, Post $post)
     {
-        return $userLogin->user_id === $post->user_id
+        return $this->isAuthor($userLogin, $post)
             ? Response::allow()
             : Response::deny( __('messages.policy-post-delete'));
     }

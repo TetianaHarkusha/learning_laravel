@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Auth\UpdatePasswordRequest;
+use App\Http\Requests\Auth\SendLinkRequest;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Http\Response;
 use App\Models\UserLogin;
@@ -25,15 +26,11 @@ class PasswordResettingController extends Controller
     /**
      * The password resetting handler
      * 
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Auth\SendLinkRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function sendLink(Request $request) 
+    public function sendLink(SendLinkRequest $request) 
     {
-        $validated = $request->validate([
-            'login' => 'min:4|max:50|required|exists:user_logins,login',
-        ]);
-
         $status = Password::sendResetLink(
             $request->only('login')
         );

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Enums\UserRoleEnum;
 
 class RoleSeeder extends Seeder
 {
@@ -15,8 +16,9 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('roles')->insert(['name' => 'administrator']);
-        DB::table('roles')->insert(['name' => 'editor']);
-        DB::table('roles')->insert(['name' => 'user']);
+        foreach(UserRoleEnum::cases() as $role) 
+        {
+            DB::table('roles')->insert(['name' => $role->value ]);
+        }
     }
 }
