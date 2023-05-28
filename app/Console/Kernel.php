@@ -4,9 +4,11 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
-{
+{   
     /**
      * Define the application's command schedule.
      *
@@ -15,7 +17,18 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->call(function () {
+            DB::table('users')->update(['updated_at' => now(),]);
+            })
+            ->name('update:users_table')
+            ->everyFiveMinutes()
+            ->withoutOverlapping()
+            ->onSuccess(function () {
+                Log::info('The table update was successful');
+            })
+            ->onFailure(function () {
+                Log::info('Failed to update the table');
+            });
     }
 
     /**
