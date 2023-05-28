@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Jobs\UpdateUsersTable;
 
 class Kernel extends ConsoleKernel
 {   
@@ -17,17 +18,14 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function () {
-            DB::table('users')->update(['updated_at' => now(),]);
-            })
+        $schedule->job(new UpdateUsersTable, 'schedule')
             ->name('update:users_table')
             ->everyFiveMinutes()
-            ->withoutOverlapping()
             ->onSuccess(function () {
-                Log::info('The table update was successful');
+                Log::info("The task has been added to 'schedule' queue.");
             })
             ->onFailure(function () {
-                Log::info('Failed to update the table');
+                Log::info("Failed to add the task to the queue.");
             });
     }
 
