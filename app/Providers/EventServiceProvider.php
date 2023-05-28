@@ -7,6 +7,14 @@ use Illuminate\Support\Facades\Event;
 use App\Events\Registered;
 use App\Listeners\SendEmailRegistrationNotification;
 use App\Listeners\SendEmailVerificationNotification;
+use Illuminate\Console\Events\ScheduledTaskStarting;
+use Illuminate\Console\Events\ScheduledTaskFinished;
+use Illuminate\Console\Events\ScheduledTaskSkipped;
+use Illuminate\Console\Events\ScheduledTaskFailed;
+use App\Listeners\LogScheduledTaskStarting;
+use App\Listeners\LogScheduledTaskFinished;
+use App\Listeners\LogScheduledTaskSkipped;
+use App\Listeners\LogScheduledTaskFailed;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -19,6 +27,22 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailRegistrationNotification::class,
             SendEmailVerificationNotification::class,  
+        ],
+
+        ScheduledTaskStarting::class => [
+            LogScheduledTaskStarting::class,
+        ],
+     
+        ScheduledTaskFinished::class => [
+            LogScheduledTaskFinished::class,
+        ],
+                  
+        ScheduledTaskSkipped::class => [
+            LogScheduledTaskSkipped::class,
+        ],
+     
+        ScheduledTaskFailed::class => [
+            LogScheduledTaskFailed ::class,
         ],
     ];
 
