@@ -2,6 +2,7 @@
     "(and :count more error)": "(та ще :count помилка)",
     "(and :count more errors)": "(та ще :count помилок)",
     "A fresh verification link has been sent to your email address!": "На вашу електронну адресу надіслано нове посилання для підтвердження!",
+    "all": "усі",
     "All rights reserved.": "Усі права захищені.",
     "Author": "Автор",
     "Before proceeding, please check your email for a verification link.": "Перш ніж продовжити, перевірте свою електронну пошту на наявність посилання для підтвердження.",

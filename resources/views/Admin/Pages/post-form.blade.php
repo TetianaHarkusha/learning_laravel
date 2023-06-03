@@ -93,22 +93,22 @@
                             <div class="card-footer">
                             @if ($method == 'create')
                             <button type="submit" class="btn btn-info" formmethod="post" formaction="{{ route('dashboard.posts.store') }}">
-                                <i class="fas fa-sd-card"></i> {{ _('Save') }}
+                                <i class="fas fa-sd-card"></i> {{ __('Save') }}
                             </button>
                             @endif
                             @if ($method == 'edit')
                             @method('PATCH')
                             <button type="submit" class="btn btn-info" formaction="{{ route('dashboard.posts.update', ['post' => $post]) }}">
-                                <i class="fas fa-sd-card"></i> {{ _('Save') }} {{ __('changes') }}
+                                <i class="fas fa-sd-card"></i> {{ __('Save') }} {{ __('changes') }}
                             </button>
                             @endif
                             @if ($method == 'show')
                             <button type="submit" class="btn btn-info" formmethod="get" formaction="{{ route('dashboard.posts.edit', ['post' => $post]) }}">
-                                <i class="fas fa-pencil-alt"></i> {{ _('Edit') }}
+                                <i class="fas fa-pencil-alt"></i> {{ __('Edit') }}
                             </button>
                             @endif
                             <button type="submit" class="btn btn-secondary float-right" formmethod="get" formaction="{{ route('dashboard.main') }}">
-                                <i class="fas fa-ban"></i> {{ _('Exit') }}
+                                <i class="fas fa-ban"></i> {{ __('Exit') }}
                             </button>
                             </div>
                             <!-- /.card-footer -->
