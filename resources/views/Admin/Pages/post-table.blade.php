@@ -52,10 +52,18 @@
                             </small>
                         </td>
                         <td>{{$post->slug}}</td>
-                        <td>
-                            <i class="nav-icon fas fa-thumbs-up"></i> {{$post->likes}}
-                        </td>
                         <td>{{$post->user->name}}</td>
+                        <td>
+                            {{$post->likes}}<br>
+                            <div class="row gx-5">
+                            <div class="col">
+                                <a class="nav-icon fas fa-thumbs-up" href="{{ route('dashboard.posts.like', ['post' => $post]) }}"></a>  
+                            </div>
+                            <div class="col">     
+                                <a class="nav-icon fas fa-thumbs-down" href="{{ route('dashboard.posts.like', ['post' => $post, 'mark' => -1]) }}"></a>
+                            </div>
+                            </div>
+                        </td>
                         <td class="project-actions text-right">
                             <a class="btn btn-primary btn-sm" href="{{ route('dashboard.posts.show', ['post' => $post]) }}">
                                 <i class="fas fa-folder"></i> {{ __('View') }}

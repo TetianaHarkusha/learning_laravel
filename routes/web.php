@@ -141,6 +141,7 @@ Route::middleware(['setLocale','throttle:updating-pages'])->group(function () {
     Route::prefix('dashboard')->name('dashboard.')->middleware(['verified', 'auth'])->group(function() {
         Route::get('', [AdminController::class, 'main'])->name('main');
         Route::resource('posts', PostController::class);
+        Route::get('/posts/{post}/like/{mark?}', [PostController::class, 'like'])->name('posts.like');
     });
 
     //routes for Authentication
