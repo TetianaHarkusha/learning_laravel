@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Admin\StoreUpdatePostRequest;
 use App\Models\Post;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\RateLimiter;
 
 class PostController extends Controller
 {
@@ -39,7 +40,7 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() 
+    public function create()
     {
         return view('Admin.Pages.post-form', [
             'title' => 'create',
@@ -64,8 +65,8 @@ class PostController extends Controller
         $post->likes = $request->input('likes');
         $post->user_id = $request->user()->user_id;
         $post->save();
-        
-        return back()->withSuccess( __('The post was successfully added.'));
+
+        return back()->withSuccess(__('The post was successfully added.'));
     }
 
     /**
@@ -78,7 +79,7 @@ class PostController extends Controller
     {
         return view('Admin.Pages.post-form', [
             'title' => 'view post',
-            'pageName' => __('View post with') .' id= ' . $post->id,
+            'pageName' => __('View post with') . ' id=' . $post->id,
             'post' => $post,
             'method' => 'show',
         ]);
@@ -94,7 +95,7 @@ class PostController extends Controller
     {
         return view('Admin.Pages.post-form', [
             'title' => 'edit post',
-            'pageName' =>  __('Edit post with') .' id= ' . $post->id,
+            'pageName' =>  __('Edit post with') . ' id= ' . $post->id,
             'post' => $post,
             'method' => 'edit',
         ]);
@@ -128,6 +129,33 @@ class PostController extends Controller
     {
         Post::destroy($post);
 
-        return back()->withSuccess( __('The post was successfully deleted'));
+        return back()->withSuccess(__('The post was successfully deleted'));
+    }
+
+    /**
+     * Adds one like/dislike
+     *
+     * @param  \App\Models\Post $post
+     * @param int $mark
+     * @param  \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function like(Post $post, Request $request, $mark = Null)
+    {
+        $executed = RateLimiter::attempt(
+            'post-like:user_login' . $request->user()->id . 'post' . $post->id,
+            $perDay = 1,
+            function() use ($post, $mark) {
+                $mark? $post->decrement('likes'): $post->increment('likes');
+                $post->save();
+            },
+            86400
+        );
+        if (!$executed) {
+            $seconds = RateLimiter::availableIn('post-like:user_login' . $request->user()->id . 'post' . $post->id);
+            return back()->with('message', __('You can only give one reaction per day!') . ' (' . $seconds . __('s ') . __('left') . ')');
+        };
+
+        return back()->withSuccess( __('The reaction was added.'));
     }
 }

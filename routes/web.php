@@ -30,8 +30,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('setLocale')->group(function () {
-
+Route::middleware(['setLocale','throttle:updating-pages'])->group(function () {
     // routes for main page
     Route::get('/', function () {
         return view('Pages.main', ['title' => 'StadyLaravel-main']);
@@ -142,6 +141,7 @@ Route::middleware('setLocale')->group(function () {
     Route::prefix('dashboard')->name('dashboard.')->middleware(['verified', 'auth'])->group(function() {
         Route::get('', [AdminController::class, 'main'])->name('main');
         Route::resource('posts', PostController::class);
+        Route::get('/posts/{post}/like/{mark?}', [PostController::class, 'like'])->name('posts.like');
     });
 
     //routes for Authentication
