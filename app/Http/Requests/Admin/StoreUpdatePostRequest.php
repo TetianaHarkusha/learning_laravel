@@ -24,9 +24,10 @@ class StoreUpdatePostRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'min:2|max:100',
-            'text' => 'min:2',
+            'title' => 'required|min:2|max:100',
+            'text' => 'required|min:2',
             'likes' => 'integer',
+            'image' => 'image:jpg, jpeg, png',
         ];
     }
 }
