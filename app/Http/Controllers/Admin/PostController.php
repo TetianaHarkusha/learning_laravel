@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\StoreUpdatePostRequest;
 use App\Models\Post;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -62,11 +63,17 @@ class PostController extends Controller
         $post->title = $request->input('title');
         $post->slug = Str::of($request->input('title'))->slug('-');
         $post->text = $request->input('text');
-        $post->likes = $request->input('likes');
+        $post->likes = 0;
         $post->user_id = $request->user()->user_id;
         $post->save();
 
-        return back()->withSuccess(__('The post was successfully added.'));
+        if ($request->hasFile('image')) {
+            $request->file('image')->storeAs('images','post' . $post->id . '.jpg', 'public');
+        }
+
+        Storage::put('docs/post' . $post->id . '.txt', $post->title . "\r\n" . $post->text);
+
+        return redirect()->route('dashboard.posts.show', ['post' => $post->id])->withSuccess(__('The post was successfully added.'));
     }
 
     /**
@@ -77,10 +84,22 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        $image = 'images/post' . $post->id . '.jpg';
+        if (Storage::missing($image)) {
+            unset($image);
+        };
+        
+        $file = 'docs/post' . $post->id . '.txt';
+        if (Storage::missing($file)) {
+            unset($file);
+        };  
+
         return view('Admin.Pages.post-form', [
             'title' => 'view post',
             'pageName' => __('View post with') . ' id=' . $post->id,
             'post' => $post,
+            'image' => $image ?? Null,
+            'file' => $file ?? Null,
             'method' => 'show',
         ]);
     }
@@ -93,10 +112,16 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        $image = 'images/post' . $post->id . '.jpg';
+        if (Storage::missing($image)) {
+            unset($image);
+        };  
+        
         return view('Admin.Pages.post-form', [
             'title' => 'edit post',
             'pageName' =>  __('Edit post with') . ' id= ' . $post->id,
             'post' => $post,
+            'image' => $image ?? Null,
             'method' => 'edit',
         ]);
     }
@@ -113,10 +138,15 @@ class PostController extends Controller
         $post->title = $request->input('title');
         $post->slug = Str::of($request->input('title'))->slug('-');
         $post->text = $request->input('text');
-        $post->likes = $request->input('likes');
         $post->save();
-        
-        return redirect()->route('dashboard.posts.edit', ['post' => $post->id])->withSuccess( __('The post was successfully modified.'));
+
+        if ($request->hasFile('image')) {
+            $request->file('image')->storeAs('images','post' . $post->id . '.jpg', 'public');
+        }
+
+        Storage::put('docs/post' . $post->id . '.txt', $post->title . "\r\n" . $post->text);
+    
+        return redirect()->route('dashboard.posts.show', ['post' => $post->id])->withSuccess( __('The post was successfully modified.'));
     }
 
     /**
@@ -127,7 +157,9 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        Post::destroy($post);
+        Post::destroy($post->id);
+
+        Storage::delete(['images/post' . $post->id . '.jpg', 'docs/post' . $post->id . '.txt']);
 
         return back()->withSuccess(__('The post was successfully deleted'));
     }
@@ -157,5 +189,21 @@ class PostController extends Controller
         };
 
         return back()->withSuccess( __('The reaction was added.'));
+    }
+
+    /**
+     * Download the txt-file of the specified resource.
+     *
+     * @param  \App\Models\Post $post
+     * @return \Illuminate\Http\Response
+     */
+    public function download(Post $post)
+    {
+        $file = 'docs/post' . $post->id . '.txt';
+        if (Storage::exists($file)) {
+            return Storage::download($file);
+        };
+
+        return back();
     }
 }

@@ -15,9 +15,9 @@ use App\Http\Controllers\Auth\UserLoginController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\PasswordResettingController;
 use App\Http\Controllers\LanguageController;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Http\Request;
+//use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -142,6 +142,7 @@ Route::middleware(['setLocale','throttle:updating-pages'])->group(function () {
         Route::get('', [AdminController::class, 'main'])->name('main');
         Route::resource('posts', PostController::class);
         Route::get('/posts/{post}/like/{mark?}', [PostController::class, 'like'])->name('posts.like');
+        Route::get('/posts/{post}/download', [PostController::class, 'download'])->name('posts.download');
     });
 
     //routes for Authentication
